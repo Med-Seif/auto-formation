@@ -1,0 +1,68 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Terrain
+ *
+ * @ORM\Table(name="terrain")
+ * @ORM\Entity
+ */
+class Terrain
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="id", type="string", length=1, nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lib", type="string", length=50, nullable=false)
+     */
+    private $lib;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Match", mappedBy="terrain")
+     */
+    private $matchs;
+    /**
+     * Get id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set lib
+     *
+     * @param string $lib
+     * @return Terrain
+     */
+    public function setLib($lib)
+    {
+        $this->lib = $lib;
+
+        return $this;
+    }
+
+    /**
+     * Get lib
+     *
+     * @return string
+     */
+    public function getLib()
+    {
+        return $this->lib;
+    }
+}

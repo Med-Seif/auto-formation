@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @author Med_Seif <bromdhane@gail.com>
+ */
+
+namespace Application\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="customers")
+ * @ORM\Entity(repositoryClass="Application\Entity\CustomerRepository")
+ */
+Class Customer {
+
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\Column(type="string",length=45,nullable=false)
+     */
+    protected $label;
+
+    /**
+     * @ORM\Column(type="string",length=100,nullable=false)
+     */
+    protected $address;
+
+    /**
+     * @ORM\Column(type="date",nullable=true)
+     */
+    protected $date;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Country",inversedBy="customers")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id",nullable=true)
+     */
+    protected $country;
+
+    /**
+     * @ORM\OneToMany(targetEntity="sale", mappedBy="customer")
+     */
+    protected $sales;
+
+}

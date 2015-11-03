@@ -1,0 +1,38 @@
+<?php
+/**
+ * @author Med_Seif <bromdhane@gail.com>
+ */
+
+namespace Application\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="suppliers")
+ */
+Class Supplier {
+
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\Column(type="string",length=45,nullable=false)
+     */
+    protected $label;
+
+    /**
+     * @ORM\Column(type="string",length=45,nullable=false)
+     */
+    protected $email;
+
+    /**
+     * @ORM\OneToMany(targetEntity="product", mappedBy="supplier")
+     */
+    protected $products;
+
+}

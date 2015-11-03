@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * @author Med_Seif <bromdhane@gail.com>
+ */
+
+namespace Application\Entity;
+
+use Zend\Form\Annotation as Form;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ *  @Form\Name("sale")
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="sales")
+ * */
+Class Sale {
+
+    /** @ORM\Id
+     *  @ORM\Column(type="integer")
+     *  @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @Form\Type("DoctrineModule\Form\Element\ObjectSelect")
+     * @Form\Options({
+     *      "label":"Product",
+     *      "target_class":"Application\Entity\Product",
+     *      "property":"label",
+     *      "find_method":{
+     *          "name" : "findAll"
+     *      }
+     * })
+     * @Form\Attributes({"class":"form-control"})
+     *
+     * @ORM\ManyToOne(targetEntity="product",inversedBy="sales")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     */
+    protected $product;
+
+    /**
+     * @Form\Type("DoctrineModule\Form\Element\ObjectSelect")
+     * @Form\Options({
+     *      "label":"Customer",
+     *      "target_class":"Application\Entity\Customer",
+     *      "property":"label",
+     *      "find_method":{
+     *          "name" : "findAll"
+     *      }
+     * })
+     * @Form\Attributes({"class":"form-control"})
+     *
+     * @ORM\ManyToOne(targetEntity="customer",inversedBy="sales")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
+     */
+    protected $customer;
+
+    /**
+     * @Form\Attributes({"type":"text","class":"form-control"})
+     * @Form\Options({"label":"Quantity"})
+     * @Form\Filter({"name":"StringTrim"})
+     * @Form\Validator({"name":"Digits"})
+     *
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    protected $quantity;
+
+    /**
+     * @Form\Type("Zend\Form\Element\Date")
+     * @Form\Attributes({"class":"form-control"})
+     * @Form\Options({"label":"Date","format":"d/m/Y"})
+     * @Form\Attributes({"step":"any"})
+     * @Form\Filter({"name":"StringTrim"})
+     *
+     * @ORM\Column(type="date",nullable=false)
+     */
+    protected $date;
+
+}

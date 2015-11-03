@@ -1,0 +1,34 @@
+<h1>New sale</h1>
+<?php
+$form->setAttribute('action', $this->url('sale', array('action' => 'add')));
+$form->prepare();
+// overrides default error decorator for this form
+$this->formElementErrors()
+    ->setMessageOpenFormat('<div class="alert alert-danger" role="alert" style="margin-top:1em">')
+    ->setMessageSeparatorString('<br />')
+    ->setMessageCloseString('</div>');
+echo $this->form()->openTag($form);
+?>
+<div class="form-group">
+    <?php echo $this->formLabel($form->get('product')); ?>
+    <?php echo $this->formElement($form->get('product')); ?>
+    <?php echo $this->formElementErrors($form->get('product'));?>
+</div>
+<div class="form-group">
+    <?php echo $this->formLabel($form->get('customer')); ?>
+    <?php echo $this->formElement($form->get('customer')); ?>
+    <?php echo $this->formElementErrors($form->get('customer'));?>
+</div>
+<div class="form-group">
+    <?php echo $this->formLabel($form->get('quantity')); ?>
+    <?php echo $this->formElement($form->get('quantity')); ?>
+    <?php echo $this->formElementErrors($form->get('quantity'));?>
+</div>
+<div class="form-group">
+    <?php echo $this->formLabel($form->get('date')); ?>
+    <?php echo $this->formElement($form->get('date')); ?>
+    <?php echo $this->formElementErrors($form->get('date'));?>
+</div>
+<?php
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();

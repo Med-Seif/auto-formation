@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css') }}" rel="stylesheet" />
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <h2>Listing</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Terrain</th>
+                <th>Type</th>
+                <th>Buts</th>
+                <th>Classe</th>
+                <th>Résultat</th>
+                <th>Note</th>
+                <th>Blessure</th>
+                <th>Commentaire</th>
+            </tr>
+        </thead>
+        {% for item in matchs %}
+            <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.date | date('d/m/Y')}}</td>
+                <td>{{item.terrain.lib}}</td>
+                <td>{{item.type.lib}}</td>
+                <td>{{item.buts}}</td>
+                <td>{{item.classe}}</td>
+                <td>{{item.res}}</td>
+                <td>{{item.note}}</td>
+                <td>{{item.injury}}</td>
+                <td>{{item.comment}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

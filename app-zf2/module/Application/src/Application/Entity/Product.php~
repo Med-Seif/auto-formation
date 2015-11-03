@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * @author Med_Seif <bromdhane@gail.com>
+ */
+
+namespace Application\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="products")
+ * @ORM\Entity(repositoryClass="Application\Entity\ProductRepository")
+ * */
+Class Product {
+
+    /**
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue (strategy="AUTO")
+     * */
+    protected $id;
+
+    /**
+     * @ORM\Column(type="string",length=45,nullable=false)
+     * */
+    protected $label;
+
+    /**
+     *  @ORM\Column(type="float",nullable=false)
+     */
+    protected $price;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="supplier", inversedBy="products")
+     * @ORM\JoinColumn(name="supplier_id", referencedColumnName="id")
+     */
+    protected $supplier;
+
+    /**
+     * @ORM\OneToMany(targetEntity="sale", mappedBy="product")
+     */
+    protected $sales;
+
+}

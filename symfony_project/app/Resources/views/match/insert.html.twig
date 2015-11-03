@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css') }}" rel="stylesheet" />
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <div class="row">
+        {{ form_start(form,{'attr':{'class':''}}) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="form-group col-md-6">
+                {{ form_label(form.date) }}
+                {{ form_errors(form.date) }}
+                {{ form_widget(form.date,{'attr':{'class':'form-control'}}) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.buts) }}
+                {{ form_errors(form.buts) }}
+                {{ form_widget(form.buts,{'attr':{'class':'form-control'}}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                {{ form_label(form.terrain) }}
+                {{ form_errors(form.terrain) }}
+                {{ form_widget(form.terrain,{'attr':{'class':'form-control'}}) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.type) }}
+                {{ form_errors(form.type) }}
+                {{ form_widget(form.type,{'attr':{'class':'form-control'}}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                {{ form_label(form.classe) }}
+                {{ form_errors(form.classe) }}
+                {{ form_widget(form.classe,{'attr':{'class':'form-control'}}) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.res) }}
+                {{ form_errors(form.res) }}
+                {{ form_widget(form.res,{'attr':{'class':'form-control'}}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                {{ form_label(form.note) }}
+                {{ form_errors(form.note) }}
+                {{ form_widget(form.note,{'attr':{'class':'form-control'}}) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.saison) }}
+                {{ form_errors(form.saison) }}
+                {{ form_widget(form.saison,{'attr':{'class':'form-control'}}) }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.comment) }}
+            {{ form_errors(form.comment) }}
+            {{ form_widget(form.comment,{'attr':{'class':'form-control'}}) }}
+        </div>
+        <div class="checkbox">
+            <label>
+                {{ form_widget(form.injury,{'attr':{'type':'checkbox'}}) }}
+                <b>{{ form.injury.vars.label }}</b>
+            </label>
+            {{ form_errors(form.injury) }}
+        </div>
+        <div style="text-align: center">
+            {{ form_widget(form.save,{'attr':{ 'class':'btn btn-primary btn-lg'}}) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+<a class="btn btn-info" href="<?php echo $this->url('sale', array('action' => 'add')); ?>">New sale</a>
+<br /><br />
+<?php echo $this->flashMessenger()->render('success', array('alert', 'alert-success'));?>
+<table id="dtable" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Date of transaction</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($sales as $sale) : ?>
+            <tr>
+                <td><?php echo $this->escapeHtml($sale->getID()); ?></td>
+                <td><?php echo $this->escapeHtml($sale->getCustomer()->getLabel()); ?></td>
+                <td><?php echo $this->escapeHtml($sale->getProduct()->getLabel()); ?></td>
+                <td><?php echo $this->escapeHtml($sale->getQuantity()); ?></td>
+                <td><?php echo ($sale->getDate()) ? $this->escapeHtml($sale->getDate('l d, F, Y')) : "-"; ?></td>
+                <td>
+                    <a class="btn btn-success btn-xs" href="<?php echo $this->url('sale', array('action' => 'edit', 'id' => $sale->getID())); ?>">Edit</a>
+                    <a class="btn btn-danger btn-xs" href="<?php echo $this->url('sale', array('action' => 'delete', 'id' => $sale->getID())); ?>">Delete</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php
+ echo $this->paginationControl(
+     // the paginator object
+     $sales,
+     // the scrolling style
+     'sliding',
+     // the partial to use to render the control
+     'partial/paginator.phtml',
+     // the route to link to when a user clicks a control link
+     array(
+         'route' => 'sale'
+     )
+ );

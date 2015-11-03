@@ -5,69 +5,50 @@
  *
  * @author Med_Seif <bromdhane@gail.com>
  */
-class SearchCustomerForm {
-    public function __construct() {
-        parent::__construct('search-customer');
+
+namespace Application\Form;
+
+use Zend\Form\Form;
+use Zend\InputFilter\InputFilter;
+use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
+
+class SearchCustomerForm extends Form {
+
+    private $em;
+
+    public function __construct(\Doctrine\ORM\EntityManager $em) {
+        parent::__construct('searchCustomerForm');
+        $this->em = $em;
+        $this
+                ->setAttribute('method', 'get')
+                ->setHydrator(new ClassMethodsHydrator(false))
+                ->setInputFilter(new InputFilter());
         $this->add(array(
-            'name'       => 'label',
-            'type'       => 'Text',
-            'options'    => array(
-                'label' => 'Label',
+            'type'    => 'Application\Form\Fieldset\CustomerFieldset',
+            'options' => array(
+                'use_as_base_fieldset' => true,
             ),
-            'attributes' => array(
-                'class' => 'form-control'
-            )
         ));
-        $this->add(array(
-            'name'       => 'address',
-            'type'       => 'Text',
-            'options'    => array(
-                'label' => 'Address',
-            ),
-            'attributes' => array(
-                'class' => 'form-control'
-            )
-        ));
-        $this->add(array(
-            'name'       => 'country',
-            'type'       => 'DoctrineModule\Form\Element\ObjectSelect',
-            'options'    => array(
-                'label'          => 'Country',
-                'object_manager' => $this->em,
-                'target_class'   => 'Application\Entity\Country',
-                'property'       => 'label',
-                'is_method'      => true,
-                'find_method'    => array(
-                    'name'   => 'findBy',
-                    'params' => array(
-                        'criteria' => array(),
-                        'orderBy'  => array('label' => 'ASC'),
-                    ),
-                ),
-            ),
-            'attributes' => array(
-                'class' => 'form-control'
-            )
-        ));
-        $this->add(array(
-            'name'       => 'date',
-            'type'       => 'text',
-            'options'    => array(
-                'label' => 'Date première transaction',
-            ),
-            'attributes' => array(
-                'class' => 'form-control'
-            )
-        ));
+
         $this->add(array(
             'name'       => 'submit',
             'type'       => 'Submit',
             'attributes' => array(
-                'value' => 'Save',
+                'value' => 'Search',
                 'id'    => 'submitbutton',
                 'class' => 'btn btn-warning',
             ),
         ));
+        $labelLabel = $this->get('customer')->get('label')->getLabel();
+        $this->get('customer')->get('label')->setAttribute('placeholder', $labelLabel);
+
+        $labelDate = $this->get('customer')->get('date')->getLabel();
+        $this->get('customer')->get('date')->setAttribute('placeholder', $labelDate);
+
+        $labelAddress = $this->get('customer')->get('address')->getLabel();
+        $this->get('customer')->get('address')->setAttribute('placeholder', $labelAddress);
+
+        $this->get('customer')->get('country')->getProxy()->setObjectmanager($this->em);
     }
 
 }

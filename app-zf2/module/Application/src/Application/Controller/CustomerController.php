@@ -18,12 +18,24 @@ use Zend\Paginator\Paginator;
 class CustomerController extends AbstractActionController {
 
     protected $em;
+
+    CONST FORM_CUSTOMER_CU     = 1; // add/update
+    CONST FORM_CUSTOMER_SEARCH = 2; // search
+
     /**
      *
      * @return Zend\Form\Form
      */
-    public function getForm() {
-        $form = $this->getServiceLocator()->get('CustomerForm');
+
+    public function getForm($flag = self::FORM_CUSTOMER_CU) {
+        switch ($flag) {
+            case self::FORM_CUSTOMER_CU:
+                $form = $this->getServiceLocator()->get('CustomerForm');
+                break;
+            case self::FORM_CUSTOMER_SEARCH:
+                $form = new \Application\Form\SearchCustomerForm($this->getEntityManager());
+                break;
+        }
         return $form;
     }
 
@@ -35,12 +47,23 @@ class CustomerController extends AbstractActionController {
     }
 
     public function indexAction() {
-        $customers  = $this->getEntityManager()->getRepository('Application\Entity\Customer')->findAll();
+        $form       = $this->getForm(self::FORM_CUSTOMER_SEARCH);
+        $request  = $this->getRequest();
+        $customer = new \Application\Entity\Customer();
+        $customer->exchangeArray($request->getQuery()->customer);
+        $form->bind($customer);
+        if ($request->isGet() /*&& $form->isValid()*/){
+            $data = $request->getQuery();
+        }
+        $customers  = $this->getEntityManager()->getRepository('Application\Entity\Customer')->searchCustomers($data);
         $collection = new ArrayCollection($customers);
         $paginator  = new Paginator(new Adapter($collection));
         $page       = $this->getRequest()->getQuery()->page;
         $paginator->setCurrentPageNumber($page)->setItemCountPerPage(10);
-        return array('customers' => $paginator);
+        return array(
+            'form'             => $form,
+            'customerFieldset' => $form->get('customer'),
+            'customers'        => $paginator);
     }
 
     public function addAction() {
@@ -139,4 +162,5 @@ class CustomerController extends AbstractActionController {
             'sales'    => $sales
         );
     }
+
 }

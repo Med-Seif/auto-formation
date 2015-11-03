@@ -1,26 +1,20 @@
 <?php
 
-/**
- * Description of Customer
- *
- * @author Seif
- */
+namespace Application\Form\Fieldset;
 
-namespace Application\Form;
+use Application\Entity\Customer;
+use Zend\Form\Fieldset;
+use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 
-use Zend\Form\Form;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Doctrine\ORM\EntityManager;
+class CustomerFieldset extends Fieldset implements InputFilterProviderInterface {
 
-class CustomerForm extends Form {
-
-    public $em;
-
-    public function __construct(EntityManager $em) {
+    public function __construct() {
         parent::__construct('customer');
-        $this->em = $em;
-        $hydrator = new DoctrineHydrator($em, 'Application\Entity\Country'); // in order to read country field as objet Country
-        $this->setHydrator($hydrator);
+        $this
+                ->setHydrator(new ClassMethodsHydrator(false))
+                ->setObject(new Customer());
+
         $this->add(array(
             'name'       => 'label',
             'type'       => 'Text',
@@ -46,12 +40,12 @@ class CustomerForm extends Form {
             'type'       => 'DoctrineModule\Form\Element\ObjectSelect',
             'options'    => array(
                 'label'              => 'Country',
-                'object_manager'     => $this->em,
+                //'object_manager' => $this->em,
                 'target_class'       => 'Application\Entity\Country',
                 'property'           => 'label',
                 'is_method'          => true,
                 'display_empty_item' => true,
-                'empty_item_label'   => '',
+                'empty_item_label'   => '--Country--',
                 'find_method'        => array(
                     'name'   => 'findBy',
                     'params' => array(
@@ -68,7 +62,7 @@ class CustomerForm extends Form {
             'name'       => 'date',
             'type'       => 'text',
             'options'    => array(
-                'label' => 'Date première transaction',
+                'label' => 'First transaction date',
             ),
             'attributes' => array(
                 'class' => 'form-control'
@@ -83,6 +77,16 @@ class CustomerForm extends Form {
                 'class' => 'btn btn-warning',
             ),
         ));
+    }
+
+    /**
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification() {
+        return array();
     }
 
 }

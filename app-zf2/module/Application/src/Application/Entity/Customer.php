@@ -204,4 +204,16 @@ Class Customer {
             'country' => $this->getCountry()->getID()];
     }
 
+    public function exchangeArray($data) {
+        $this->id      = (!empty($data['id'])) ? $data['id'] : null;
+        $this->label   = (!empty($data['label'])) ? $data['label'] : null;
+        $this->address = (!empty($data['address'])) ? $data['address'] : null;
+        $this->country = (!empty($data['country'])) ? $data['country'] : null;
+        $this->date    = (!empty($data['date'])) ? $data['date'] : null;
+    }
+
+    public function getArrayCopy() {
+        return get_object_vars($this);
+    }
+
 }

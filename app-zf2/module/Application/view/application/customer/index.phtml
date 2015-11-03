@@ -1,6 +1,42 @@
 <a class="btn btn-warning" href="<?php echo $this->url('customer', array('action' => 'add')); ?>">New customer</a>
 <br /><br />
-<?php echo $this->flashMessenger()->render('success', array('alert', 'alert-success'));?>
+<?php echo $this->flashMessenger()->render('success', array('alert', 'alert-success')); ?>
+<?php
+$form->setAttribute('action', $this->url('customer', array('action' => 'index')));
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+<div class="row">
+    <div class="col-md-2">
+        <div class="form-group">
+            <?php echo $this->formElement($customerFieldset->get('label')); ?>
+            <?php echo $this->formElementErrors($customerFieldset->get('label')); ?>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <?php echo $this->formElement($customerFieldset->get('address')); ?>
+            <?php echo $this->formElementErrors($customerFieldset->get('address')); ?>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <?php echo $this->formElement($customerFieldset->get('country')); ?>
+            <?php echo $this->formElementErrors($customerFieldset->get('country')); ?>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <?php echo $this->formElement($customerFieldset->get('date')); ?>
+            <?php echo $this->formElementErrors($customerFieldset->get('date')); ?>
+        </div>
+    </div>
+</div>
+<?php
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();
+?>
+<hr>
 <table id="dtable" class="table table-striped table-bordered">
     <thead>
         <tr>
@@ -32,15 +68,15 @@
     </tbody>
 </table>
 <?php
- echo $this->paginationControl(
-     // the paginator object
-     $customers,
-     // the scrolling style
-     'sliding',
-     // the partial to use to render the control
-     'partial/paginator.phtml',
-     // the route to link to when a user clicks a control link
-     array(
-         'route' => 'home'
-     )
- );
+echo $this->paginationControl(
+        // the paginator object
+        $customers,
+        // the scrolling style
+        'sliding',
+        // the partial to use to render the control
+        'partial/paginator.phtml',
+        // the route to link to when a user clicks a control link
+        array(
+    'route' => 'home'
+        )
+);

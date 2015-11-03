@@ -37,7 +37,7 @@ class ProductForm extends Form {
             'attributes' => array(
                 'value' => 'Save',
                 'id'    => 'submitbutton',
-                'class' => 'btn btn-success',
+                'class' => 'btn btn-danger',
             ),
         ));
         $hydrator = new AggregateHydrator();

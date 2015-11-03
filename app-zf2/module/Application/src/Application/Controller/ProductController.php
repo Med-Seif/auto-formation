@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Paginator\Adapter\Collection as Adapter;
 use Zend\Paginator\Paginator;
 use Application\Entity\Product;
+
 class ProductController extends AbstractActionController {
 
     protected $em;
@@ -58,7 +59,27 @@ class ProductController extends AbstractActionController {
     }
 
     public function editAction() {
-
+        $form    = $this->getForm();
+        $em      = $this->getEntityManager();
+        $id      = $this->params()->fromRoute('id');
+        $product = $em->find('Application\Entity\Product', $id);
+        if (!$product) {
+            throw new \Exception("$id is not found in the database");
+        }
+        $form->bind($product);
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $this->getEntityManager()->persist($product);
+                $this->getEntityManager()->flush();
+                $this->flashMessenger()->addSuccessMessage("Object Product was successfully edited");
+                return $this->redirect()->toRoute('product');
+            }
+        }
+        return array(
+            'form' => $form,
+            'id'   => $id);
     }
 
     public function deleteAction() {

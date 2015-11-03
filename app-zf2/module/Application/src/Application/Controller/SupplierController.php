@@ -19,8 +19,7 @@ class SupplierController extends AbstractActionController {
     protected $em;
 
     public function getForm() {
-        $builder = new \Zend\Form\Annotation\AnnotationBuilder();
-        $form    = $builder->createForm('Application\Entity\Supplier');
+        $form = \Application\Form\SupplierForm::getInstance();
         return $form;
     }
 
@@ -37,16 +36,48 @@ class SupplierController extends AbstractActionController {
         $paginator  = new Paginator(new Adapter($collection));
         $page       = $this->getRequest()->getQuery()->page;
         $paginator->setCurrentPageNumber($page)->setItemCountPerPage(10);
-        return array('products' => $paginator);
+        return array('suppliers' => $paginator);
     }
 
     public function addAction() {
-        $form = $this->getForm();
+        $form     = $this->getForm();
+        $request  = $this->getRequest();
+        $supplier = new \Application\Entity\Supplier();
+        $form->bind($supplier);
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $this->getEntityManager()->persist($supplier);
+                $this->getEntityManager()->flush();
+                $this->flashMessenger()->addSuccessMessage("Object Supplier was successfully inserted");
+                return $this->redirect()->toRoute('supplier');
+            }
+        }
         return array('form' => $form);
     }
 
     public function editAction() {
-
+        $form     = $this->getForm();
+        $em       = $this->getEntityManager();
+        $id       = $this->params()->fromRoute('id');
+        $supplier = $em->find('Application\Entity\Supplier', $id);
+        if (!$supplier) {
+            throw new \Exception("$id is not found in the database");
+        }
+        $request = $this->getRequest();
+        $form->bind($supplier);
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $this->getEntityManager()->persist($supplier);
+                $this->getEntityManager()->flush();
+                $this->flashMessenger()->addSuccessMessage("Object Supplier was successfully edited");
+                return $this->redirect()->toRoute('supplier');
+            }
+        }
+        return array(
+            'form' => $form,
+            'id'   => $id);
     }
 
     public function deleteAction() {

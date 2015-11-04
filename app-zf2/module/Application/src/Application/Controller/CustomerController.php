@@ -47,12 +47,22 @@ class CustomerController extends AbstractActionController {
     }
 
     public function indexAction() {
-        $form       = $this->getForm(self::FORM_CUSTOMER_SEARCH);
-        $request  = $this->getRequest();
+        $form     = $this->getForm(self::FORM_CUSTOMER_SEARCH);
+        return array(
+            'form'             => $form,
+            'customerFieldset' => $form->get('customer'));
+    }
+
+    public function ajaxPagesAction() {
+        $request = $this->getRequest();
+        if (!$request->isXmlHttpRequest()) {
+            throw new Exception("USER : Only ajax Requests");
+        }
+        $request->isXmlHttpRequest();
+        $response = $this->getResponse();
         $customer = new \Application\Entity\Customer();
         $customer->exchangeArray($request->getQuery()->customer);
-        $form->bind($customer);
-        if ($request->isGet() /*&& $form->isValid()*/){
+        if ($request->isGet()) {
             $data = $request->getQuery();
         }
         $customers  = $this->getEntityManager()->getRepository('Application\Entity\Customer')->searchCustomers($data);
@@ -60,10 +70,17 @@ class CustomerController extends AbstractActionController {
         $paginator  = new Paginator(new Adapter($collection));
         $page       = $this->getRequest()->getQuery()->page;
         $paginator->setCurrentPageNumber($page)->setItemCountPerPage(10);
-        return array(
-            'form'             => $form,
-            'customerFieldset' => $form->get('customer'),
-            'customers'        => $paginator);
+        $res        = array();
+        foreach ($paginator as $customerItem) {
+            $res [] = $customerItem->getValues();
+        }
+        $response->setContent(\Zend\Json\Json::encode(array(
+                    'customers' => $res,
+                    'pages'     => $paginator->getPages()
+                        )
+                )
+        );
+        return $this->response;
     }
 
     public function addAction() {

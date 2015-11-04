@@ -216,4 +216,15 @@ Class Customer {
         return get_object_vars($this);
     }
 
+    /**
+     * Return array of data in textual format, no objects are containes
+     */
+    public function getValues() {
+        return array('id'      => $this->id,
+            'label'   => $this->label,
+            'address' => $this->address,
+            'country' => ($this->getCountry()) ? $this->getCountry()->getLabel() : null,
+            'date'    => $this->getDate());
+    }
+
 }

@@ -320,4 +320,37 @@ class Customer extends \Application\Entity\Customer implements \Doctrine\ORM\Pro
         return parent::toArray();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function exchangeArray($data)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'exchangeArray', array($data));
+
+        return parent::exchangeArray($data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getArrayCopy()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getArrayCopy', array());
+
+        return parent::getArrayCopy();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getValues()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValues', array());
+
+        return parent::getValues();
+    }
+
 }

@@ -47,7 +47,7 @@ class CustomerController extends AbstractActionController {
     }
 
     public function indexAction() {
-        $form     = $this->getForm(self::FORM_CUSTOMER_SEARCH);
+        $form = $this->getForm(self::FORM_CUSTOMER_SEARCH);
         return array(
             'form'             => $form,
             'customerFieldset' => $form->get('customer'));
@@ -55,13 +55,10 @@ class CustomerController extends AbstractActionController {
 
     public function ajaxPagesAction() {
         $request = $this->getRequest();
+        //$form    = $this->getForm(self::FORM_CUSTOMER_SEARCH);
         if (!$request->isXmlHttpRequest()) {
             throw new Exception("USER : Only ajax Requests");
         }
-        $request->isXmlHttpRequest();
-        $response = $this->getResponse();
-        $customer = new \Application\Entity\Customer();
-        $customer->exchangeArray($request->getQuery()->customer);
         if ($request->isGet()) {
             $data = $request->getQuery();
         }
@@ -74,7 +71,7 @@ class CustomerController extends AbstractActionController {
         foreach ($paginator as $customerItem) {
             $res [] = $customerItem->getValues();
         }
-        $response->setContent(\Zend\Json\Json::encode(array(
+        $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
                     'customers' => $res,
                     'pages'     => $paginator->getPages()
                         )

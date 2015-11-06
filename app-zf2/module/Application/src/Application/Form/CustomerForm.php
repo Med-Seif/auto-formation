@@ -28,7 +28,7 @@ class CustomerForm extends Form {
                 'label' => 'Label',
             ),
             'attributes' => array(
-                'class' => 'form-control'
+                'class'         => 'form-control',
             )
         ));
         $this->add(array(

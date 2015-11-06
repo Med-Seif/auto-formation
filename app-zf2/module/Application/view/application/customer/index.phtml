@@ -4,45 +4,34 @@
     <?php echo $this->flashMessenger()->render('success', array('alert', 'alert-success')); ?>
     <?php
     $form->setAttribute('action', $this->url('customer', array('action' => 'index')));
-    $form->setAttribute('ng-submit', 'validateForm($event)');
     $form->setAttribute('id', $form->getName());
     $form->prepare();
-    foreach($form->getAttributes() as $key => $value){
+    foreach ($form->getAttributes() as $key => $value) {
         $attibs [] = "$key='$value'";
     }
     ?>
-    <form <?=implode(' ',$attibs)?>>
-    <div class="row">
-        <div class="col-md-2">
-            <div class="form-group">
-                <?php echo $this->formElement($customerFieldset->get('label')); ?>
-                <?php echo $this->formElementErrors($customerFieldset->get('label')); ?>
-            </div>
+    <form <?= implode(' ', $attibs) ?>>
+        <div class="form-group">
+            <?php echo $this->formElement($customerFieldset->get('label')); ?>
+            <?php echo $this->formElementErrors($customerFieldset->get('label')); ?>
         </div>
-        <div class="col-md-2">
-            <div class="form-group">
-                <?php echo $this->formElement($customerFieldset->get('address')); ?>
-                <?php echo $this->formElementErrors($customerFieldset->get('address')); ?>
-            </div>
+        <div class="form-group">
+            <?php echo $this->formElement($customerFieldset->get('address')); ?>
+            <?php echo $this->formElementErrors($customerFieldset->get('address')); ?>
         </div>
-        <div class="col-md-2">
-            <div class="form-group">
-                <?php echo $this->formElement($customerFieldset->get('country')); ?>
-                <?php echo $this->formElementErrors($customerFieldset->get('country')); ?>
-            </div>
+        <div class="form-group">
+            <?php echo $this->formElement($customerFieldset->get('country')); ?>
+            <?php echo $this->formElementErrors($customerFieldset->get('country')); ?>
         </div>
-        <div class="col-md-2">
-            <div class="form-group">
-                <?php echo $this->formElement($customerFieldset->get('date')); ?>
-                <?php echo $this->formElementErrors($customerFieldset->get('date')); ?>
-            </div>
+        <div class="form-group">
+            <?php echo $this->formElement($customerFieldset->get('date')); ?>
+            <?php echo $this->formElementErrors($customerFieldset->get('date')); ?>
         </div>
-    </div>
-    <?php
-    echo $this->formSubmit($form->get('submit'));
-    ?>
+        <?php
+        echo $this->formSubmit($form->get('submit'));
+        ?>
     </form>
-    <hr>
+    <br/>
     <table id="dtable" class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -74,31 +63,80 @@
     </div>
 </div>
 <script>
-    $(function(){
-
-    })
     var app = angular.module('myapp', []);
-    app.config(['$httpProvider', function ($httpProvider) {
-            // ajouter ce paramètre aux appels envoyés avec ajax pour pouvoir être détectés par AjaxContext
-            $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
-        }]);
+    app.config(function ($httpProvider, $provide) {
+        // ajouter ce paramètre aux appels envoyés avec ajax pour pouvoir être détectés par AjaxContext
+        $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+        // register the interceptor as a service
+        $provide.factory('httpInterceptor', function ($q, $rootScope) {
+            return {
+                // optional method
+                'request': function (config) {
+                    $("#dtable").css('opacity','0.3');
+                    // do something on success
+                    return config;
+                },
+                // optional method
+                'requestError': function (rejection) {
+                    // do something on error
+                    if (canRecover(rejection)) {
+                        return responseOrNewPromise
+                    }
+                    return $q.reject(rejection);
+                },
+                // optional method
+                'response': function (response) {
+                    $("#dtable").css('opacity','1');
+                    return response;
+                },
+                // optional method
+                'responseError': function (rejection) {
+                    // do something on error
+                    if (canRecover(rejection)) {
+                        return responseOrNewPromise
+                    }
+                    return $q.reject(rejection);
+                }
+            };
+        });
+        $httpProvider.interceptors.push('httpInterceptor');
+    });
     app.controller('CustomerController', function ($scope, $http, $compile) {
+        $scope.page = 1;
         $http.get('<?php echo $this->url('customer', array('action' => 'ajax-pages')) ?>', {params: {page: 1}}).success(
                 function (response) {
                     $scope.customers = response.customers;
                     $scope.pages = response.pages;
                 });
         $scope.loadpage = function (page) {
-            $http.get('<?php echo $this->url('customer', array('action' => 'ajax-pages')) ?>', {params: {page: page}}).success(
+            params = {
+                label: $scope.label,
+                address: $scope.address,
+                date: $scope.date,
+                country: $scope.country,
+                page: page
+            }
+            $http.get('<?php echo $this->url('customer', array('action' => 'ajax-pages')) ?>', {params: params}).success(
                     function (response) {
                         $scope.customers = response.customers;
                         $scope.pages = response.pages;
                     });
         }
-        $scope.validateForm = function(event){
-            console.log($("#searchCustomerForm").serializeArray());
-            alert('true');
+        $scope.validateForm = function (event) {
+            params = {
+                label: $scope.label,
+                address: $scope.address,
+                date: $scope.date,
+                country: $scope.country
+            };
+            $http.get('<?php echo $this->url('customer', array('action' => 'ajax-pages')) ?>', {params: params}).success(
+                    function (response) {
+                        $scope.customers = response.customers;
+                        $scope.pages = response.pages;
+                    });
             event.preventDefault();
+            return true;
         }
+
     });
 </script>

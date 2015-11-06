@@ -36,7 +36,7 @@ class SearchCustomerForm extends Form {
             'attributes' => array(
                 'value' => 'Search',
                 'id'    => 'submitbutton',
-                'class' => 'btn btn-warning',
+                'class' => 'btn btn-default',
             ),
         ));
         $labelLabel = $this->get('customer')->get('label')->getLabel();
@@ -49,6 +49,11 @@ class SearchCustomerForm extends Form {
         $this->get('customer')->get('address')->setAttribute('placeholder', $labelAddress);
 
         $this->get('customer')->get('country')->getProxy()->setObjectmanager($this->em);
-    }
 
+        $this->get('customer')->get('country')->getProxy()->setObjectmanager($this->em);
+
+        $this->setAttribute('data-ng-submit', 'validateForm($event)');
+        $this->setAttribute('class', 'form-inline');
+
+    }
 }

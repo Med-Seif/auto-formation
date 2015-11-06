@@ -22,7 +22,9 @@ class CustomerFieldset extends Fieldset implements InputFilterProviderInterface 
                 'label' => 'Label',
             ),
             'attributes' => array(
-                'class' => 'form-control'
+                'id'            => 'label',
+                'class'         => 'form-control',
+                'data-ng-model' => 'label',
             )
         ));
         $this->add(array(
@@ -32,7 +34,9 @@ class CustomerFieldset extends Fieldset implements InputFilterProviderInterface 
                 'label' => 'Address',
             ),
             'attributes' => array(
-                'class' => 'form-control'
+                'id'            => 'address',
+                'class'         => 'form-control',
+                'data-ng-model' => 'address',
             )
         ));
         $this->add(array(
@@ -55,7 +59,9 @@ class CustomerFieldset extends Fieldset implements InputFilterProviderInterface 
                 ),
             ),
             'attributes' => array(
-                'class' => 'form-control'
+                'id'            => 'country',
+                'class'         => 'form-control',
+                'data-ng-model' => 'country',
             )
         ));
         $this->add(array(
@@ -65,7 +71,9 @@ class CustomerFieldset extends Fieldset implements InputFilterProviderInterface 
                 'label' => 'First transaction date',
             ),
             'attributes' => array(
-                'class' => 'form-control'
+                'id'            => 'date',
+                'class'         => 'form-control',
+                'data-ng-model' => 'date',
             )
         ));
         $this->add(array(

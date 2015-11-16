@@ -30,4 +30,79 @@ class Country {
      */
     protected $customers;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->customers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     *
+     * @return Country
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Add customer
+     *
+     * @param \Application\Entity\Customer $customer
+     *
+     * @return Country
+     */
+    public function addCustomer(\Application\Entity\Customer $customer)
+    {
+        $this->customers[] = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Remove customer
+     *
+     * @param \Application\Entity\Customer $customer
+     */
+    public function removeCustomer(\Application\Entity\Customer $customer)
+    {
+        $this->customers->removeElement($customer);
+    }
+
+    /**
+     * Get customers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCustomers()
+    {
+        return $this->customers;
+    }
 }

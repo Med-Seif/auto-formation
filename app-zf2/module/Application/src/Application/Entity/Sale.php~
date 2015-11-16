@@ -78,4 +78,113 @@ Class Sale {
      */
     protected $date;
 
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param integer $quantity
+     *
+     * @return Sale
+     */
+    public function setQuantity($quantity) {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return integer
+     */
+    public function getQuantity() {
+        return $this->quantity;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Sale
+     */
+    public function setDate($date) {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate($format = 'd/m/Y') {
+        if (!is_null($this->date)) {
+            return $this->date->format($format);
+        }
+        return $this->date;
+    }
+
+    /**
+     * Set product
+     *
+     * @param \Application\Entity\product $product
+     *
+     * @return Sale
+     */
+    public function setProduct(\Application\Entity\product $product = null) {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * Get product
+     *
+     * @return \Application\Entity\product
+     */
+    public function getProduct() {
+        return $this->product;
+    }
+
+    /**
+     * Set customer
+     *
+     * @param \Application\Entity\customer $customer
+     *
+     * @return Sale
+     */
+    public function setCustomer(\Application\Entity\customer $customer = null) {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Get customer
+     *
+     * @return \Application\Entity\customer
+     */
+    public function getCustomer() {
+        return $this->customer;
+    }
+
+    public function toArray() {
+        return [
+            'id'       => $this->getID(),
+            'product'  => $this->getProduct()->getID(),
+            'quantity' => $this->getQuantity(),
+            'date'     => $this->getDate(),
+            'customer' => $this->getCustomer()->getID()];
+    }
+
 }

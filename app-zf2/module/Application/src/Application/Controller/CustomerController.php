@@ -14,6 +14,8 @@ use Zend\Mvc\Controller\Plugin\FlashMessenger;
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Paginator\Adapter\Collection as Adapter;
 use Zend\Paginator\Paginator;
+use Application\Auth\Storage;
+use Zend\Mvc\MvcEvent;
 
 class CustomerController extends AbstractActionController {
 
@@ -21,12 +23,13 @@ class CustomerController extends AbstractActionController {
 
     CONST FORM_CUSTOMER_CU     = 1; // add/update
     CONST FORM_CUSTOMER_SEARCH = 2; // search
-
+    public function onDispatch(MvcEvent $e) {
+        parent::onDispatch($e);
+    }
     /**
      *
      * @return Zend\Form\Form
      */
-
     public function getForm($flag = self::FORM_CUSTOMER_CU) {
         switch ($flag) {
             case self::FORM_CUSTOMER_CU:
@@ -46,7 +49,16 @@ class CustomerController extends AbstractActionController {
         return $this->em;
     }
 
+    public function checkIdentity() {
+        $auth = $this->getServiceLocator()->get('AppAuthentification');
+        if (!$auth->hasIdentity()) {
+            return $this->redirect()->toRoute('auth');
+        }
+        return $auth;
+    }
+
     public function indexAction() {
+        $this->checkIdentity();
         $form = $this->getForm(self::FORM_CUSTOMER_SEARCH);
         return array(
             'form'             => $form,
@@ -72,6 +84,7 @@ class CustomerController extends AbstractActionController {
             $res [] = $customerItem->getValues();
         }
         $this->getResponse()->setContent(\Zend\Json\Json::encode(array(
+                    'count'     => count($collection),
                     'customers' => $res,
                     'pages'     => $paginator->getPages()
                         )
@@ -81,6 +94,7 @@ class CustomerController extends AbstractActionController {
     }
 
     public function addAction() {
+
         $em       = $this->getEntityManager();
         $form     = $this->getForm();
         $request  = $this->getRequest();

@@ -8,17 +8,12 @@
 
 namespace Application\Form;
 
-use Zend\Form\Form;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Doctrine\ORM\EntityManager;
+use Zend\Form\Form;
 
 class CustomerForm extends Form {
-
-    public $em;
-
-    public function __construct(EntityManager $em) {
+    public function __construct(\Doctrine\ORM\EntityManager $em) {
         parent::__construct('customer');
-        $this->em = $em;
         $hydrator = new DoctrineHydrator($em, 'Application\Entity\Country'); // in order to read country field as objet Country
         $this->setHydrator($hydrator);
         $this->add(array(
@@ -28,7 +23,7 @@ class CustomerForm extends Form {
                 'label' => 'Label',
             ),
             'attributes' => array(
-                'class'         => 'form-control',
+                'class' => 'form-control',
             )
         ));
         $this->add(array(
@@ -46,7 +41,7 @@ class CustomerForm extends Form {
             'type'       => 'DoctrineModule\Form\Element\ObjectSelect',
             'options'    => array(
                 'label'              => 'Country',
-                'object_manager'     => $this->em,
+                'object_manager'     => $em,
                 'target_class'       => 'Application\Entity\Country',
                 'property'           => 'label',
                 'is_method'          => true,

@@ -20,7 +20,7 @@ class ProductController extends AbstractActionController {
     protected $em;
 
     public function getForm() {
-        $form = $this->getServiceLocator()->get('ProductForm');
+        $form = $this->getServiceLocator()->get('Product');
         $form->get('product')->get('supplier')->getProxy()->setObjectmanager($this->getEntityManager());
         return $form;
     }

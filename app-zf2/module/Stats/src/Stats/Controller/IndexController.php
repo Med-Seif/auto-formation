@@ -8,28 +8,27 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Application\Controller;
+namespace Stats\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Authentication\AuthenticationService;
 use Zend\View\Model\ViewModel;
-use Application\Auth\Adapter;
-use Application\Auth\Storage;
-use Zend\Authentication\Storage\Session as SessionStorage;
+use Zend\EventManager\EventManager;
 
 class IndexController extends AbstractActionController {
 
-    protected $em;
-
-    public function getEntityManager() {
-        if (null === $this->em) {
-            $this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
-        }
-        return $this->em;
-    }
-
     public function indexAction() {
+        $events = new EventManager();
+        $events->attach('do', function ($e) {
+            $event  = $e->getName();
+            $params = $e->getParams();
+            printf(
+                    'Handled event "%s", with parameters %s', $event, json_encode($params)
+            );
+        });
 
+        $params = array('foo' => 'bar', 'baz' => 'bat');
+        $events->trigger('do', null, $params);
+        return new ViewModel();
     }
 
 }

@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="users")
+ * @ORM\Entity(repositoryClass="Application\Entity\Repository\UserRepository")
  */
 Class User {
 
@@ -26,7 +27,7 @@ Class User {
     /**
      * @ORM\Column(type="string",length=45,nullable=false)
      */
-    protected $login;
+    protected $username;
 
     /**
      * @ORM\Column(type="string",length=45,nullable=false)
@@ -43,39 +44,47 @@ Class User {
      */
     protected $password;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Auth", mappedBy="user")
+     */
+    protected $auths;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->auths = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
     /**
-     * Set login
+     * Set username
      *
-     * @param string $login
+     * @param string $username
      *
      * @return User
      */
-    public function setLogin($login)
-    {
-        $this->login = $login;
+    public function setUsername($username) {
+        $this->username = $username;
 
         return $this;
     }
 
     /**
-     * Get login
+     * Get username
      *
      * @return string
      */
-    public function getLogin()
-    {
-        return $this->login;
+    public function getUsername() {
+        return $this->username;
     }
 
     /**
@@ -85,8 +94,7 @@ Class User {
      *
      * @return User
      */
-    public function setEmail($email)
-    {
+    public function setEmail($email) {
         $this->email = $email;
 
         return $this;
@@ -97,8 +105,7 @@ Class User {
      *
      * @return string
      */
-    public function getEmail()
-    {
+    public function getEmail() {
         return $this->email;
     }
 
@@ -109,8 +116,7 @@ Class User {
      *
      * @return User
      */
-    public function setRole($role)
-    {
+    public function setRole($role) {
         $this->role = $role;
 
         return $this;
@@ -121,8 +127,7 @@ Class User {
      *
      * @return integer
      */
-    public function getRole()
-    {
+    public function getRole() {
         return $this->role;
     }
 
@@ -133,8 +138,7 @@ Class User {
      *
      * @return User
      */
-    public function setPassword($password)
-    {
+    public function setPassword($password) {
         $this->password = $password;
 
         return $this;
@@ -145,8 +149,39 @@ Class User {
      *
      * @return string
      */
-    public function getPassword()
-    {
+    public function getPassword() {
         return $this->password;
     }
+
+    /**
+     * Add auth
+     *
+     * @param \Application\Entity\Auth $auth
+     *
+     * @return User
+     */
+    public function addAuth(\Application\Entity\Auth $auth) {
+        $this->auths[] = $auth;
+
+        return $this;
+    }
+
+    /**
+     * Remove auth
+     *
+     * @param \Application\Entity\Auth $auth
+     */
+    public function removeAuth(\Application\Entity\Auth $auth) {
+        $this->auths->removeElement($auth);
+    }
+
+    /**
+     * Get auths
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAuths() {
+        return $this->auths;
+    }
+
 }

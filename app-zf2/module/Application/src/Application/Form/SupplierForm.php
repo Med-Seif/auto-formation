@@ -42,7 +42,7 @@ class SupplierForm {
                                 'attributes' => array(
                                     'value' => 'Save',
                                     'id'    => 'submitbutton',
-                                    'class' => 'btn btn-success',
+                                    'class' => 'btn btn-primary',
                                 ),
                             )
                         )

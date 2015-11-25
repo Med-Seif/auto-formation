@@ -22,18 +22,24 @@ Class Auth implements ObjectManagerAware {
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue (strategy="AUTO")
      */
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User",inversedBy="auths")
+     * @ORM\Column(type="string",nullable=false)
+     */
+    protected $sessionId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User",inversedBy="auths",cascade={"persist"})
      * @ORM\JoinColumn(name="iduser", referencedColumnName="id",nullable=false)
      */
     protected $user;
 
     /**
-     * @ORM\Column(type="datetime",nullable=false)
+     * @ORM\Column(type="datetime",nullable=true)
      */
     protected $connectTime;
 
@@ -154,6 +160,26 @@ Class Auth implements ObjectManagerAware {
      */
     public function getConnected() {
         return $this->connected;
+    }
+
+    /**
+     * Get sessionId
+     *
+     * @return string
+     */
+    public function getSessionId() {
+        return $this->sessionId;
+    }
+
+    /**
+     * Set sessionId
+     *
+     * @param string $sessionId
+     * @return Auth
+     */
+    public function setSessionId($sessionId) {
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
     public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata) {

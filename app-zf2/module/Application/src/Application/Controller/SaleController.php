@@ -31,7 +31,7 @@ class SaleController extends AbstractActionController {
             'attributes' => array(
                 'value' => 'Save',
                 'id'    => 'submit-button',
-                'class' => 'btn btn-info',
+                'class' => 'btn btn-primary',
             ),
         ));
         $hydrator = new AggregateHydrator();

@@ -75,7 +75,7 @@ class CustomerForm extends Form {
             'attributes' => array(
                 'value' => 'Save',
                 'id'    => 'submitbutton',
-                'class' => 'btn btn-warning',
+                'class' => 'btn btn-primary',
             ),
         ));
     }

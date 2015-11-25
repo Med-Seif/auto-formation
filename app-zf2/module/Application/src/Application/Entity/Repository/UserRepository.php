@@ -26,7 +26,14 @@ class UserRepository extends EntityRepository {
 
     public function getConnected() {
         $query = $this->getEntityManager()->createQuery("SELECT u FROM Application\Entity\User u JOIN u.auths a WHERE a.connected = ?1");
-        $query->setParameter(1,1);
+        $query->setParameter(1, 1);
+        return $query->getResult();
+    }
+
+    public function isConnected($id) {
+        $query = $this->getEntityManager()->createQuery("SELECT u FROM Application\Entity\User u JOIN u.auths a WHERE a.connected = ?1 AND a.id_user = ?2");
+        $query->setParameter(1, 1);
+        $query->setParameter(2, $id);
         return $query->getResult();
     }
 

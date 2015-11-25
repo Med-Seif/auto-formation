@@ -6,10 +6,10 @@
  * @author Med_Seif <bromdhane@gail.com>
  */
 
-namespace Application\Service;
+namespace Admin\Service;
 
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
-use Application\Entity\User;
+use Admin\Model\UserTable;
 
 class UserService implements ObjectManagerAwareInterface {
 
@@ -19,8 +19,12 @@ class UserService implements ObjectManagerAwareInterface {
 
     }
 
-    public function isConnectedUser($id) {
+    public function getAll() {
+        return $this->objectManager->getRepository('Application\Entity\User')->findAll();
+    }
 
+    public function isConnectedUser($id) {
+        return $this->objectManager->getRepository('Application\Entity\User')->isConnected($id);
     }
 
     public function getConnectedUsers() {

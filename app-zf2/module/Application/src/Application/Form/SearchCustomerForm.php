@@ -36,7 +36,7 @@ class SearchCustomerForm extends Form {
             'attributes' => array(
                 'value' => 'Search',
                 'id'    => 'submitbutton',
-                'class' => 'btn btn-default',
+                'class' => 'btn btn-primary',
             ),
         ));
         $labelLabel = $this->get('customer')->get('label')->getLabel();

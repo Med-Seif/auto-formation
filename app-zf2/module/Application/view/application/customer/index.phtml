@@ -1,5 +1,5 @@
 <div ng-app="myapp" ng-controller="CustomerController">
-    <a class="btn btn-warning" href="<?php echo $this->url('customer', array('action' => 'add')); ?>">New customer</a>
+    <a class="btn btn-default" href="<?php echo $this->url('customer', array('action' => 'add')); ?>">New customer</a>
     <br /><br />
     <?php echo $this->flashMessenger()->render('success', array('alert', 'alert-success')); ?>
     <?php

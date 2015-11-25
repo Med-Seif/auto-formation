@@ -11,9 +11,13 @@ namespace Application\Auth;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\Result;
+use Zend\EventManager\EventManager;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerInterface;
 
 class Adapter implements AdapterInterface {
 
+    protected $eventManager;
     private $username;
     private $password;
 
@@ -35,14 +39,33 @@ class Adapter implements AdapterInterface {
      * @throws \Zend\Authentication\Adapter\Exception\ExceptionInterface If authentication cannot be performed
      */
     public function authenticate() {
-        $user   = $this->em->getRepository('Application\Entity\User')->isValid($this->username, $this->password);
+        $user = $this->em->getRepository('Application\Entity\User')->isValid($this->username, $this->password);
         if ($user) {
             $code = Result::SUCCESS;
-            return new Result($code, $user);
+            $result = new Result($code, $user);
+            $this->getEventManager()->trigger("event.login", $this, array('user' => $result->getIdentity()));
+            return $result;
         } else {
             $code = Result::FAILURE;
+            // log all failed attemptions to login
+            $this->getEventManager()->trigger("event.failure", $this, array('username' => $this->username, 'password' => $this->password, 'ip' => $_SERVER['REMOTE_ADDR']));
             return new Result($code, '');
         }
+    }
+
+    public function getEventManager() {
+        if (!$this->eventManager) {
+            $this->setEventManager(new EventManager());
+        }
+        return $this->eventManager;
+    }
+
+    public function setEventManager(EventManagerInterface $eventManager) {
+        $eventManager->setIdentifiers(array(
+            "Auth.events",
+            get_class($this)
+        ));
+        $this->eventManager = $eventManager;
     }
 
 }

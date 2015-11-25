@@ -123,20 +123,6 @@ return array(
                     ),
                 ),
             ),
-            'user'        => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'       => '/user[@:action][@:id]',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
-                    ),
-                    'defaults'    => array(
-                        'controller' => 'Application\Controller\User',
-                        'action'     => 'Index',
-                    ),
-                ),
-            ),
         ),
     ),
     'service_manager' => array(
@@ -147,16 +133,19 @@ return array(
         ),
         'factories'          => array(
             'translator'          => 'Zend\Mvc\Service\TranslatorServiceFactory',
+
             'AppAuthentification' => function($sm) {
                 $auth = new \Zend\Authentication\AuthenticationService();
-                $auth->setStorage(new \Application\Auth\Storage($sm->get('Doctrine\ORM\EntityManager')));
+                $auth->setStorage(new \Application\Auth\AppStorage());
                 return $auth;
             },
+
             'CustomerForm'       => 'Application\Service\Factory\CustomerFormFactory',
         ),
         'services'        => array(),
         'invokables'      => array(
-            'UserService' => 'Application\Service\UserService'
+             'UserService' => 'Admin\Service\UserService',
+            //'AppAuthentification' => 'Zend\Authentication\AuthenticationService'
         ),
         'aliases'         => array(
             'Zend\Authentication\AuthenticationService' => 'AppAuthentification',
@@ -183,7 +172,6 @@ return array(
             'Application\Controller\Supplier' => Controller\SupplierController::class,
             'Application\Controller\Sale'     => Controller\SaleController::class,
             'Application\Controller\Auth'     => Controller\AuthController::class,
-            'Application\Controller\User'     => Controller\UserController::class,
         ),
     ),
     'view_manager'       => array(

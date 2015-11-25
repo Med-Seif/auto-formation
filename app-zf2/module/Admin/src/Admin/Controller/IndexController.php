@@ -8,27 +8,23 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Stats\Controller;
+namespace Admin\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\EventManager\EventManager;
 
 class IndexController extends AbstractActionController {
 
-    public function indexAction() {
-        $events = new EventManager();
-        $events->attach('do', function ($e) {
-            $event  = $e->getName();
-            $params = $e->getParams();
-            printf(
-                    'Handled event "%s", with parameters %s', $event, json_encode($params)
-            );
-        });
+    public function getAdapter() {
+        if (!$this->adapter) {
+            $sm            = $this->getServiceLocator();
+            $this->adapter = $sm->get('Zend\Db\Adapter\Adapter');
+        }
+        return $this->adapter;
+    }
 
-        $params = array('foo' => 'bar', 'baz' => 'bat');
-        $events->trigger('do', null, $params);
-        return new ViewModel();
+    public function indexAction() {
+
     }
 
 }

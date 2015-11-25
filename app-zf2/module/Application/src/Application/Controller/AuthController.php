@@ -14,19 +14,12 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Authentication\AuthenticationService;
 use Zend\View\Model\ViewModel;
 use Application\Auth\Adapter;
-use Application\Auth\Storage;
 use Application\Form\LoginForm;
 
 class AuthController extends AbstractActionController {
 
     protected $em;
     protected $auth;
-
-    public function checkIdentity() {
-        if ($this->getAuth()->hasIdentity()) {
-            return $this->redirect()->toRoute('home');
-        }
-    }
 
     public function getEntityManager() {
         if (null === $this->em) {
@@ -35,13 +28,12 @@ class AuthController extends AbstractActionController {
         return $this->em;
     }
 
-    public function getAuth() {
-        if (null === $this->auth) {
-            $auth       = new AuthenticationService();
-            $auth->setStorage(new Storage($this->getEntityManager()));
-            $this->auth = $auth;
+    public function _checkIdentity() {
+        $auth = $this->getServiceLocator()->get('AppAuthentification');
+        if ($auth->hasIdentity()) {
+            return $this->redirect()->toRoute('customer');
         }
-        return $this->auth;
+        return $auth;
     }
 
     public function getForm() {
@@ -49,7 +41,7 @@ class AuthController extends AbstractActionController {
     }
 
     public function loginAction() {
-        $this->checkIdentity();
+        //$this->checkIdentity();
         $form    = $this->getForm();
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -58,23 +50,23 @@ class AuthController extends AbstractActionController {
                 $data     = $form->getData();
                 $username = $data['login']['username'];
                 $password = $data['login']['password'];
-                $auth     = $this->getAuth();
+                $auth     = $this->getServiceLocator()->get('AppAuthentification');
                 $adapter  = new Adapter($username, $password, $this->getEntityManager());
                 $auth->setAdapter($adapter);
-                $auth->setStorage(new Storage($this->em));
                 $result   = $auth->authenticate($adapter);
                 if ($result->isValid()) {
                     return $this->redirect()->toRoute('customer');
-                } else {
-                    echo "NO";
                 }
             }
         }
+
         return array('form' => $form);
     }
 
     public function logoutAction() {
-        $this->getAuth()->clearIdentity();
+        $auth = $this->getServiceLocator()->get('AppAuthentification');
+        $auth->clearIdentity();
+        return $this->redirect()->toRoute('auth');
     }
 
 }

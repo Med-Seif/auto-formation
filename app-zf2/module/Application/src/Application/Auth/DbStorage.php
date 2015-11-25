@@ -12,7 +12,7 @@ use Zend\Authentication\Storage\StorageInterface;
 use Application\Entity\Auth;
 use Zend\Session\Container as SessionContainer;
 
-class Storage implements StorageInterface {
+class DbStorage implements StorageInterface {
 
     private $id;
     private $em;

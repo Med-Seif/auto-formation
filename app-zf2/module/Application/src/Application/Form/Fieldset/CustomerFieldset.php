@@ -82,7 +82,7 @@ class CustomerFieldset extends Fieldset implements InputFilterProviderInterface 
             'attributes' => array(
                 'value' => 'Save',
                 'id'    => 'submitbutton',
-                'class' => 'btn btn-warning',
+                'class' => 'btn btn-primary',
             ),
         ));
     }

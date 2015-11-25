@@ -16,6 +16,9 @@ use DoctrineModule\Paginator\Adapter\Collection as Adapter;
 use Zend\Paginator\Paginator;
 use Application\Auth\Storage;
 use Zend\Mvc\MvcEvent;
+use Zend\EventManager\EventManager;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerInterface;
 
 class CustomerController extends AbstractActionController {
 
@@ -23,13 +26,12 @@ class CustomerController extends AbstractActionController {
 
     CONST FORM_CUSTOMER_CU     = 1; // add/update
     CONST FORM_CUSTOMER_SEARCH = 2; // search
-    public function onDispatch(MvcEvent $e) {
-        parent::onDispatch($e);
-    }
+
     /**
      *
      * @return Zend\Form\Form
      */
+
     public function getForm($flag = self::FORM_CUSTOMER_CU) {
         switch ($flag) {
             case self::FORM_CUSTOMER_CU:
@@ -49,7 +51,7 @@ class CustomerController extends AbstractActionController {
         return $this->em;
     }
 
-    public function checkIdentity() {
+    public function _checkIdentity() {
         $auth = $this->getServiceLocator()->get('AppAuthentification');
         if (!$auth->hasIdentity()) {
             return $this->redirect()->toRoute('auth');
@@ -58,7 +60,7 @@ class CustomerController extends AbstractActionController {
     }
 
     public function indexAction() {
-        $this->checkIdentity();
+        //$this->checkIdentity();
         $form = $this->getForm(self::FORM_CUSTOMER_SEARCH);
         return array(
             'form'             => $form,
@@ -67,7 +69,6 @@ class CustomerController extends AbstractActionController {
 
     public function ajaxPagesAction() {
         $request = $this->getRequest();
-        //$form    = $this->getForm(self::FORM_CUSTOMER_SEARCH);
         if (!$request->isXmlHttpRequest()) {
             throw new Exception("USER : Only ajax Requests");
         }
@@ -143,7 +144,7 @@ class CustomerController extends AbstractActionController {
                 $em->persist($customer);
                 $em->flush(); // $customer is updated with validated form values because we previously called $form->bind($customer)
                 $this->flashMessenger()->addSuccessMessage($data['label'] . " was successfully edited");
-                return $this->redirect()->toRoute('home');
+                return $this->redirect()->toRoute('customer');
             }
         }
         return array(

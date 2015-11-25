@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="products")
  * @ORM\Entity(repositoryClass="Application\Entity\Repository\ProductRepository")
+ * @ORM\EntityListeners({"Application\Entity\Listener\EntityListener"})
  * */
 Class Product {
 

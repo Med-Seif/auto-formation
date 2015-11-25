@@ -8,6 +8,9 @@
 
 namespace Application\Entity;
 
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectManagerAware;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,19 +18,25 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="_auth")
  * @ORM\Entity(repositoryClass="Application\Entity\Repository\AuthRepository")
  */
-Class Auth {
+Class Auth implements ObjectManagerAware {
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue (strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="string",nullable=false)
+     */
+    protected $sessionId;
 
     /**
      * @ORM\ManyToOne(targetEntity="User",inversedBy="auths")
      * @ORM\JoinColumn(name="iduser", referencedColumnName="id",nullable=false)
      */
-    protected $iduser;
+    protected $user;
 
     /**
      * @ORM\Column(type="datetime",nullable=false)
@@ -67,25 +76,24 @@ Class Auth {
     }
 
     /**
-     * Set iduser
+     * Set user
      *
-     * @param integer $iduser
+     * @param integer $user
      *
      * @return Auth
      */
-    public function setIduser($iduser) {
-        $this->iduser = $iduser;
-
+    public function setUser(\Application\Entity\User $user) {
+        $this->user = $user;
         return $this;
     }
 
     /**
-     * Get iduser
+     * Get user
      *
      * @return integer
      */
-    public function getIduser() {
-        return $this->iduser;
+    public function getUser() {
+        return $this->user;
     }
 
     /**
@@ -152,6 +160,30 @@ Class Auth {
      */
     public function getConnected() {
         return $this->connected;
+    }
+
+    /**
+     * Get sessionId
+     *
+     * @return string
+     */
+    public function getSessionId() {
+        return $this->sessionId;
+    }
+
+    /**
+     * Set sessionId
+     *
+     * @param string $sessionId
+     * @return Auth
+     */
+    public function setSessionId($sessionId) {
+        $this->sessionId = $sessionId;
+        return $this;
+    }
+
+    public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata) {
+        $this->em = $objectManager;
     }
 
 }

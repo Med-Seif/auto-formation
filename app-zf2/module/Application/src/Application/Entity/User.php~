@@ -45,9 +45,16 @@ Class User {
     protected $password;
 
     /**
-     * @ORM\OneToMany(targetEntity="Auth", mappedBy="iduser")
+     * @ORM\OneToMany(targetEntity="Auth", mappedBy="user")
      */
     protected $auths;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->auths = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -144,6 +151,37 @@ Class User {
      */
     public function getPassword() {
         return $this->password;
+    }
+
+    /**
+     * Add auth
+     *
+     * @param \Application\Entity\Auth $auth
+     *
+     * @return User
+     */
+    public function addAuth(\Application\Entity\Auth $auth) {
+        $this->auths[] = $auth;
+
+        return $this;
+    }
+
+    /**
+     * Remove auth
+     *
+     * @param \Application\Entity\Auth $auth
+     */
+    public function removeAuth(\Application\Entity\Auth $auth) {
+        $this->auths->removeElement($auth);
+    }
+
+    /**
+     * Get auths
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAuths() {
+        return $this->auths;
     }
 
 }

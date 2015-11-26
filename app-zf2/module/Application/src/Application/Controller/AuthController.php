@@ -41,7 +41,6 @@ class AuthController extends AbstractActionController {
     }
 
     public function loginAction() {
-        //$this->checkIdentity();
         $form    = $this->getForm();
         $request = $this->getRequest();
         if ($request->isPost()) {

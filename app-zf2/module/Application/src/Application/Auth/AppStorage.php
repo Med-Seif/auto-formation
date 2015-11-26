@@ -20,9 +20,13 @@ class AppStorage extends SessionStorage implements EventManagerAwareInterface {
      *
      */
     public function clear() {
-        $this->getEventManager()->trigger("event.logout", $this, array('user' => parent::read()));
+        $this->getEventManager()->trigger("logout", $this, array('user' => parent::read()));
         parent::clear();
         session_regenerate_id();
+    }
+    public function write($contents) {
+        $this->getEventManager()->trigger("login", $this, array('user' => $contents));
+        parent::write($contents);
     }
 
     public function getEventManager() {

@@ -41,12 +41,7 @@ Class Auth implements ObjectManagerAware {
     /**
      * @ORM\Column(type="datetime",nullable=true)
      */
-    protected $connectTime;
-
-    /**
-     * @ORM\Column(type="datetime",nullable=true)
-     */
-    protected $disconnectTime;
+    protected $operationTime;
 
     /**
      * @ORM\Column(type="integer",length=1,nullable=false,options={"default" = 0})
@@ -97,47 +92,25 @@ Class Auth implements ObjectManagerAware {
     }
 
     /**
-     * Set connectTime
+     * Set operationTime
      *
-     * @param \DateTime $connectTime
+     * @param \DateTime $operationTime
      *
      * @return Auth
      */
-    public function setConnectTime($connectTime) {
-        $this->connectTime = $connectTime;
+    public function setOperationTime($operationTime) {
+        $this->operationTime = $operationTime;
 
         return $this;
     }
 
     /**
-     * Get connectTime
+     * Get operationTime
      *
      * @return \DateTime
      */
-    public function getConnectTime() {
-        return $this->connectTime;
-    }
-
-    /**
-     * Set disconnectTime
-     *
-     * @param \DateTime $disconnectTime
-     *
-     * @return Auth
-     */
-    public function setDisconnectTime($disconnectTime) {
-        $this->disconnectTime = $disconnectTime;
-
-        return $this;
-    }
-
-    /**
-     * Get disconnectTime
-     *
-     * @return \DateTime
-     */
-    public function getDisconnectTime() {
-        return $this->disconnectTime;
+    public function getOperationTime() {
+        return $this->operationTime;
     }
 
     /**

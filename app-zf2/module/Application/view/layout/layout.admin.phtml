@@ -51,9 +51,10 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">You are connected as <b><?php if($this->identity()) { echo($this->identity()->getUsername()); }?></b> <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#">My profile</a></li>
-                                <li><a href="<?php echo $this->url('user',array('action' => 'connected')) ?>">Online users</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="<?php echo $this->url('auth',array('action' => 'logout')) ?>">Logout</a></li>
+                                    <li><a href="<?php echo $this->url('user', array('action' => 'index')) ?>">Manage users</a></li>
+                                    <li><a href="<?php echo $this->url('user', array('action' => 'connected')) ?>">Online users</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="<?php echo $this->url('auth',array('action' => 'logout')) ?>">Logout</a></li>
 
                             </ul>
                         </li>

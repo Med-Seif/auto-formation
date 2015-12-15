@@ -309,4 +309,15 @@ class User extends \Application\Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::getAuths();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getArrayCopy()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getArrayCopy', array());
+
+        return parent::getArrayCopy();
+    }
+
 }

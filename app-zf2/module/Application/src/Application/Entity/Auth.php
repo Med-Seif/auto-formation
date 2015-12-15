@@ -22,21 +22,15 @@ Class Auth implements ObjectManagerAware {
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue (strategy="AUTO")
-     */
-    protected $id;
-
-    /**
-     * @ORM\Column(type="string",nullable=false)
-     */
-    protected $sessionId;
-
-    /**
      * @ORM\ManyToOne(targetEntity="User",inversedBy="auths",cascade={"persist"})
      * @ORM\JoinColumn(name="iduser", referencedColumnName="id",nullable=false)
      */
     protected $user;
+
+    /**
+     * @ORM\Column(type="integer",nullable=false,options={"default" = 0})
+     */
+    protected $count;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
@@ -47,28 +41,6 @@ Class Auth implements ObjectManagerAware {
      * @ORM\Column(type="integer",length=1,nullable=false,options={"default" = 0})
      */
     protected $connected;
-
-    /**
-     * Set id
-     *
-     * @param string $id
-     *
-     * @return Auth
-     */
-    public function setId($id) {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id
-     *
-     * @return string
-     */
-    public function getId() {
-        return $this->id;
-    }
 
     /**
      * Set user
@@ -136,27 +108,33 @@ Class Auth implements ObjectManagerAware {
     }
 
     /**
-     * Get sessionId
+     * Get count
      *
-     * @return string
+     * @return integer
      */
-    public function getSessionId() {
-        return $this->sessionId;
+    public function getCount() {
+        return $this->count;
     }
 
     /**
-     * Set sessionId
+     * Set count
      *
-     * @param string $sessionId
+     * @param boolean $flag
      * @return Auth
      */
-    public function setSessionId($sessionId) {
-        $this->sessionId = $sessionId;
+    public function setCount($flag) {
+        if ($flag) {
+            $this->count++;
+        }
         return $this;
     }
 
     public function injectObjectManager(ObjectManager $objectManager, ClassMetadata $classMetadata) {
         $this->em = $objectManager;
+    }
+
+    public function getArrayCopy() {
+        return get_object_vars($this);
     }
 
 }

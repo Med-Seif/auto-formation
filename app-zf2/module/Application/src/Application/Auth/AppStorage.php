@@ -16,14 +16,15 @@ use Zend\EventManager\EventManagerInterface;
 class AppStorage extends SessionStorage implements EventManagerAwareInterface {
 
     protected $eventManager;
+
     /**
      *
      */
     public function clear() {
         $this->getEventManager()->trigger("logout", $this, array('user' => parent::read()));
         parent::clear();
-        session_regenerate_id();
     }
+
     public function write($contents) {
         $this->getEventManager()->trigger("login", $this, array('user' => $contents));
         parent::write($contents);

@@ -7,9 +7,6 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\EventManager\EventManagerAwareInterface;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\EventManager;
 
 /**
  * @ORM\Entity
@@ -17,9 +14,7 @@ use Zend\EventManager\EventManager;
  * @ORM\Entity(repositoryClass="Application\Entity\Repository\CustomerRepository")
  * @ORM\EntityListeners({"Application\Entity\Listener\EntityListener"})
  */
-Class Customer implements EventManagerAwareInterface {
-
-    protected $eventManager;
+Class Customer {
 
     /**
      * @ORM\Id
@@ -78,7 +73,6 @@ Class Customer implements EventManagerAwareInterface {
      * @return Customer
      */
     public function setLabel($label) {
-        var_dump($label);
         $this->label = $label;
         return $this;
     }
@@ -89,7 +83,6 @@ Class Customer implements EventManagerAwareInterface {
      * @return string
      */
     public function getLabel() {
-        $this->getEventManager()->trigger(__FUNCTION__, $this, func_get_args());
         return $this->label;
     }
 
@@ -232,26 +225,6 @@ Class Customer implements EventManagerAwareInterface {
             'address' => $this->address,
             'country' => ($this->getCountry()) ? $this->getCountry()->getLabel() : null,
             'date'    => $this->getDate());
-    }
-
-    /**
-     * @param  EventManagerInterface $eventManager
-     * @return void
-     */
-    public function setEventManager(EventManagerInterface $eventManager) {
-        $eventManager->setIdentifiers(array(__CLASS__ . ".events"));
-        $this->eventManager = $eventManager;
-    }
-
-    /**
-     * @return EventManagerInterface
-     */
-    public function getEventManager() {
-        if (null === $this->eventManager) {
-            $this->setEventManager(new EventManager());
-        }
-
-        return $this->eventManager;
     }
 
 }

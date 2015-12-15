@@ -15,7 +15,7 @@ use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 
-class Adapter implements AdapterInterface {
+class Adapter implements AdapterInterface,EventManagerAwareInterface {
 
     protected $eventManager;
     private $username;
@@ -43,12 +43,11 @@ class Adapter implements AdapterInterface {
         if ($user) {
             $code = Result::SUCCESS;
             $result = new Result($code, $user);
-            $this->getEventManager()->trigger("event.login", $this, array('user' => $result->getIdentity()));
             return $result;
         } else {
             $code = Result::FAILURE;
             // log all failed attemptions to login
-            $this->getEventManager()->trigger("event.failure", $this, array('username' => $this->username, 'password' => $this->password, 'ip' => $_SERVER['REMOTE_ADDR']));
+            $this->getEventManager()->trigger("failure", $this, array('username' => $this->username, 'password' => $this->password, 'ip' => $_SERVER['REMOTE_ADDR']));
             return new Result($code, '');
         }
     }

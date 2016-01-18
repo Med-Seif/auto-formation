@@ -38,4 +38,13 @@ class Module {
         $e->getTarget()->layout('layout/layout.' . strtolower($moduleNamespace) . '.phtml');
     }
 
+    public function getControllerConfig() {
+
+        return array('invokables' => array(
+                'Admin\Controller\Index' => Controller\IndexController::class,
+                'Admin\Controller\Chart' => Controller\ChartController::class,
+                'Admin\Controller\User'  => Controller\UserController::class,
+            ));
+    }
+
 }

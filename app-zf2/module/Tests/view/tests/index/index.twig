@@ -1,0 +1,10 @@
+{% block content %}
+<h1>Test Twig</h1>
+{{ 'my first car'|capitalize }}
+{% if data == true %}
+{{ dump(data) }}
+{% for row in data %}
+    {{ row.id }} |  {{ row.label }}  <br />
+{% endfor %}
+{% endif %}
+{% endblock content %}

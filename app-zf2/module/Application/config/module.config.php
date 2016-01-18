@@ -32,9 +32,8 @@ return array(
                 'options'       => array(
                     'route'    => '/application',
                     'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
+                        'controller' => 'Application\Controller\Index',
+                        'action'     => 'index',
                     ),
                 ),
                 'may_terminate' => true,
@@ -133,19 +132,17 @@ return array(
         ),
         'factories'          => array(
             'translator'          => 'Zend\Mvc\Service\TranslatorServiceFactory',
-
             'AppAuthentification' => function($sm) {
                 $auth = new \Zend\Authentication\AuthenticationService();
                 $auth->setStorage(new \Application\Auth\AppStorage());
                 return $auth;
             },
-
             'CustomerForm'       => 'Application\Service\Factory\CustomerFormFactory',
         ),
         'services'        => array(),
         'invokables'      => array(
-             'UserService' => 'Admin\Service\UserService',
-            //'AppAuthentification' => 'Zend\Authentication\AuthenticationService'
+            'UserService' => 'Admin\Service\UserService',
+        //'AppAuthentification' => 'Zend\Authentication\AuthenticationService'
         ),
         'aliases'         => array(
             'Zend\Authentication\AuthenticationService' => 'AppAuthentification',
@@ -173,6 +170,9 @@ return array(
             'Application\Controller\Sale'     => Controller\SaleController::class,
             'Application\Controller\Auth'     => Controller\AuthController::class,
         ),
+        'aliases'    => array(
+            'customer' => 'Application\Controller\Customer'
+        )
     ),
     'view_manager'       => array(
         'display_not_found_reason' => true,

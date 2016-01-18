@@ -13,6 +13,8 @@ return array(
         'DoctrineModule',
         'DoctrineORMModule',
         'Tests',
+        'BjyProfiler',
+        //'ZfcTwig'
     ),
     'module_listener_options' => array(
         'module_paths' => array(

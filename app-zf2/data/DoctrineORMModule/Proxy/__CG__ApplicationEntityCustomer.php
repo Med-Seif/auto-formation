@@ -64,10 +64,10 @@ class Customer extends \Application\Entity\Customer implements \Doctrine\ORM\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'eventManager', 'id', 'label', 'address', 'date', 'country', 'sales');
+            return array('__isInitialized__', 'id', 'label', 'address', 'date', 'country', 'sales');
         }
 
-        return array('__isInitialized__', 'eventManager', 'id', 'label', 'address', 'date', 'country', 'sales');
+        return array('__isInitialized__', 'id', 'label', 'address', 'date', 'country', 'sales');
     }
 
     /**
@@ -351,28 +351,6 @@ class Customer extends \Application\Entity\Customer implements \Doctrine\ORM\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValues', array());
 
         return parent::getValues();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setEventManager(\Zend\EventManager\EventManagerInterface $eventManager)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEventManager', array($eventManager));
-
-        return parent::setEventManager($eventManager);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getEventManager()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEventManager', array());
-
-        return parent::getEventManager();
     }
 
 }

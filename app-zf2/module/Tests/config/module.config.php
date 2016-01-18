@@ -8,21 +8,22 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Admin;
+namespace Tests;
 
 return array(
-    'router'          => array(
+    'router'       => array(
         'routes' => array(
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /admin/:controller/:action
-            'admin' => array(
+            'tests'  => array(
                 'type'          => 'Literal',
                 'options'       => array(
-                    'route'    => '/admin',
+                    'route'    => '/tests',
                     'defaults' => array(
-                        'controller' => 'Admin\Controller\Index',
+                        //'__NAMESPACE__' => 'Admin\Controller',
+                        'controller' => 'Tests\Controller\Index',
                         'action'     => 'index',
                     ),
                 ),
@@ -42,56 +43,64 @@ return array(
                     ),
                 ),
             ),
-            'user'  => array(
+            'events' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'       => '/user[.:action][.:id]',
+                    'route'       => '/events[.:action]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
                     ),
                     'defaults'    => array(
-                        'controller' => 'Admin\Controller\User',
+                        'controller' => 'Tests\Controller\Events',
                         'action'     => 'index',
                     ),
                 ),
             ),
-            'chart' => array(
+            'db'     => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'       => '/chart[@:action][@:id]',
+                    'route'       => '/db[.:action]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
                     ),
                     'defaults'    => array(
-                        'controller' => 'Admin\Controller\Chart',
+                        'controller' => 'Tests\Controller\Db',
                         'action'     => 'index',
                     ),
                 ),
             ),
         ),
     ),
-    'service_manager' => array(
-        'abstract_factories' => array(),
-        'factories'          => array(
-            'Admin\Model\UserTable' => function($sm) {
-                return new Model\UserTable($sm->get('Zend\Db\Adapter\Adapter'));
-            },
-            'charts'             => 'Admin\Service\Factory\ChartsPluginManagerFactory'
+    'controllers'  => array(
+        'invokables' => array(
+            'Tests\Controller\Index'  => 'Tests\Controller\IndexController',
+            'Tests\Controller\Events' => 'Tests\Controller\EventsController',
+            'Tests\Controller\Db'     => 'Tests\Controller\DbController',
         ),
-        'services'        => array(),
-        'invokables'      => array(),
-        'aliases'         => array(),
-        'initializers'    => array()
     ),
-    'view_manager'       => array(
+    'view_manager' => array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
     ),
-    'controller_plugins' => array(
-        'invokables' => array(
-            'generator' => 'Admin\Controller\plugin\CodeGenerator',
-        ))
+    'zfctwig'      => array(
+        'extensions'          => array('Twig_Extension_Debug'), // to enble the dump function
+        'environment_options' => array(
+            'debug'            => true,
+            'strict_variables' => true) // see http://twig.sensiolabs.org/doc/api.html for all options
+    )
+        /*
+          'zfctwig'      => array(
+          'environment_loader'        => 'ZfcTwigLoaderChain',
+          'environment_class'         => 'Twig_Environment',
+          'environment_options'       => array(),
+          'loader_chain'              => array('ZfcTwigLoaderTemplateMap','ZfcTwigLoaderTemplatePathStack'),
+          'extensions'                => array('zfctwig' => 'ZfcTwigExtension'),
+          'suffix'                    => 'twig',
+          'enable_fallback_functions' => true,
+          'disable_zf_model'          => true,
+          'helper_manager'            => array('configs' => array('Zend\Navigation\View\HelperConfig')
+          )
+          ),
+         */
 );

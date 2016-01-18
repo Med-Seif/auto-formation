@@ -7,15 +7,20 @@ use Admin\Model\User;
 
 class UserTable {
 
-    protected $tableGateway;
+    public $tableGateway;
 
-    public function __construct(TableGateway $tableGateway) {
+    public function __construct($dbAdapter) {
+        $resultSetPrototype = new \Zend\Db\ResultSet\ResultSet();
+        $resultSetPrototype->setArrayObjectPrototype(new User());
+        //$features           = new \Zend\Db\TableGateway\Feature\FeatureSet();
+        //$features->addFeature(new \Zend\Db\TableGateway\Feature\MetadataFeature());
+        //$features->addFeature(new \Zend\Db\TableGateway\Feature\RowGatewayFeature('id'));
+        $tableGateway       = new \Zend\Db\TableGateway\TableGateway('users', $dbAdapter, null, $resultSetPrototype);
         $this->tableGateway = $tableGateway;
     }
 
     public function fetchAll() {
         return $resultSet = $this->tableGateway->select();
-        return $resultSet->toArray();
     }
 
     public function getUser($id) {
@@ -38,10 +43,10 @@ class UserTable {
 
         $id = (int) $user->id;
         if ($id == 0) {
-            $this->tableGateway->insert($data);
+            return $this->tableGateway->insert($data);
         } else {
             if ($this->getUser($id)) {
-                $this->tableGateway->update($data, array('id' => $id));
+                return $this->tableGateway->update($data, array('id' => $id));
             } else {
                 throw new \Exception('User id does not exist');
             }
@@ -50,6 +55,10 @@ class UserTable {
 
     public function deleteAlbum($id) {
         $this->tableGateway->delete(array('id' => (int) $id));
+    }
+
+    public function getTableGateway() {
+        return $this->tableGateway;
     }
 
 }

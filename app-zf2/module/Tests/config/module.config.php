@@ -76,7 +76,12 @@ return array(
             'Tests\Controller\Index'  => 'Tests\Controller\IndexController',
             'Tests\Controller\Events' => 'Tests\Controller\EventsController',
             'Tests\Controller\Db'     => 'Tests\Controller\DbController',
+            'Tests\Controller\View'   => 'Tests\Controller\ViewController',
         ),
+        'aliases'    => array(
+            'tests-index' => 'Tests\Controller\Index',
+            'view'        => 'Tests\Controller\View'
+        )
     ),
     'view_manager' => array(
         'template_path_stack' => array(

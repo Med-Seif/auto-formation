@@ -78,7 +78,7 @@ return array(
             'Admin\Model\UserTable' => function($sm) {
                 return new Model\UserTable($sm->get('Zend\Db\Adapter\Adapter'));
             },
-            'charts'             => 'Admin\Service\Factory\ChartsPluginManagerFactory'
+            'charts'             => 'Admin\Service\Factory\ChartsManagerFactory'
         ),
         'services'        => array(),
         'invokables'      => array(),

@@ -8,7 +8,6 @@
 
 namespace Admin\Plugin;
 
-
 class ChartsPluginManager extends \Zend\ServiceManager\AbstractPluginManager {
 
     protected $invokableClasses = array(

@@ -28,4 +28,14 @@ class IndexController extends AbstractActionController {
         );
     }
 
+    public function mvcAction() {
+        $routeMatch = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
+        $response   = $this->getResponse();
+        $response->setStatusCode(500);
+        $this->getEvent()->setResult('Invalid identifier; cannot complete request');
+        echo ($this->generator()->generate());
+        var_dump($this->getServiceLocator()->get('charts')->get('users')->getData());
+        return false;
+    }
+
 }

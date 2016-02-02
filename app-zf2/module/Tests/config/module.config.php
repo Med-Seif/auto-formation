@@ -22,10 +22,10 @@ return array(
                 'options'       => array(
                     'route'    => '/tests',
                     'defaults' => array(
-                        //'__NAMESPACE__' => 'Admin\Controller',
+                        // '__NAMESPACE__' => 'Admin\Controller',
                         'controller' => 'Tests\Controller\Index',
-                        'action'     => 'index',
-                    ),
+                        'action'     => 'index'
+                    )
                 ),
                 'may_terminate' => true,
                 'child_routes'  => array(
@@ -35,41 +35,53 @@ return array(
                             'route'       => '/[:controller[/:action]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*'
                             ),
-                            'defaults'    => array(
-                            ),
-                        ),
-                    ),
-                ),
+                            'defaults'    => array()
+                        )
+                    )
+                )
             ),
             'events' => array(
                 'type'    => 'Segment',
                 'options' => array(
                     'route'       => '/events[.:action]',
                     'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                     ),
                     'defaults'    => array(
                         'controller' => 'Tests\Controller\Events',
-                        'action'     => 'index',
-                    ),
-                ),
+                        'action'     => 'index'
+                    )
+                )
             ),
             'db'     => array(
                 'type'    => 'Segment',
                 'options' => array(
                     'route'       => '/db[.:action]',
                     'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                     ),
                     'defaults'    => array(
                         'controller' => 'Tests\Controller\Db',
-                        'action'     => 'index',
-                    ),
-                ),
+                        'action'     => 'index'
+                    )
+                )
             ),
-        ),
+            'perf'     => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'       => '/perf[.:action]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                    ),
+                    'defaults'    => array(
+                        'controller' => 'Tests\Controller\Perf',
+                        'action'     => 'index'
+                    )
+                )
+            )
+        )
     ),
     'controllers'  => array(
         'invokables' => array(
@@ -77,6 +89,7 @@ return array(
             'Tests\Controller\Events' => 'Tests\Controller\EventsController',
             'Tests\Controller\Db'     => 'Tests\Controller\DbController',
             'Tests\Controller\View'   => 'Tests\Controller\ViewController',
+            'Tests\Controller\Perf'   => 'Tests\Controller\PerfController'
         ),
         'aliases'    => array(
             'tests-index' => 'Tests\Controller\Index',
@@ -86,14 +99,22 @@ return array(
     'view_manager' => array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
-        ),
+            __DIR__ . '/../view2'
+        )
+    ),
+    'view_helpers' => array(
+    //'invokables' => array('MyViewHelper' => 'Tests\ViewHelpers\MyViewHelper')
     ),
     'zfctwig'      => array(
-        'extensions'          => array('Twig_Extension_Debug'), // to enble the dump function
+        'extensions'          => array(
+            'Twig_Extension_Debug'
+        ), // to enble the dump function
         'environment_options' => array(
             'debug'            => true,
-            'strict_variables' => true) // see http://twig.sensiolabs.org/doc/api.html for all options
-    )
+            'strict_variables' => true
+        )
+    ) // see http://twig.sensiolabs.org/doc/api.html for all options
+
         /*
           'zfctwig'      => array(
           'environment_loader'        => 'ZfcTwigLoaderChain',

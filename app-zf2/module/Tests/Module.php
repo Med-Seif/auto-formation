@@ -3,9 +3,9 @@
 namespace Tests;
 
 class Module {
-
+    protected $arr;
     public function getAutoloaderConfig() {
-        var_dump(__FUNCTION__);
+        $this->arr[] = __FUNCTION__;
         return array(
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
@@ -16,11 +16,11 @@ class Module {
     }
 
     public function init() {
-        var_dump(__FUNCTION__);
+        $this->arr[] = __FUNCTION__;
     }
 
     public function getConfig() {
-        var_dump(__FUNCTION__);
+        $this->arr[] = __FUNCTION__;
         return include __DIR__ . '/config/module.config.php';
     }
 
@@ -29,32 +29,34 @@ class Module {
      */
 
     public function getServiceConfig() {
-        var_dump(__FUNCTION__);
+        $this->arr[] = __FUNCTION__;
     }
     /**
      * controllers
      * @return type
      */
     public function getControllerConfig() {
+        $this->arr[] = __FUNCTION__;
     }
 
     public function getControllerPluginConfig() {
-        var_dump(__FUNCTION__);
+        $this->arr[] = __FUNCTION__;
     }
 
     /**
      * view_helpers
      */
     public function getViewHelperConfig() {
-        var_dump(__FUNCTION__);
+        $this->arr[] = __FUNCTION__;
     }
 
     public function onBootstrap(\Zend\Mvc\MvcEvent $e) {
-        var_dump(__FUNCTION__);
-        $application = $e->getApplication()->getServiceManager();
+        $this->arr[] = __FUNCTION__;
+        $sm = $e->getApplication()->getServiceManager();
         /* @var $renderer \Zend\View\Renderer\PhpRenderer */
-        $renderer    = $application->get('\Zend\View\Renderer\PhpRenderer');
-        $renderer->headTitle("YES");
+        $renderer    = $sm->get('\Zend\View\Renderer\PhpRenderer');
+        echo "<div class='alert alert-warning' role='alert'><b>" . implode("()</b> => <b>", $this->arr)."()</b>"."</div>";
+
     }
 
 }

@@ -92,6 +92,6 @@ return array(
     ),
     'controller_plugins' => array(
         'invokables' => array(
-            'generator' => 'Admin\Controller\plugin\CodeGenerator',
+            'generator' => 'Admin\Controller\Plugin\CodeGenerator',
         ))
 );

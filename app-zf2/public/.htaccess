@@ -1,3 +1,5 @@
+SetEnv "APP_ENV" "development"
+SetEnv "ZF2_PATH" "D:\www\auto-formation\app-zf2\vendor\zendframework2.2"
 RewriteEngine On
 # The following rule tells Apache that if the requested filename
 # exists, simply serve it.

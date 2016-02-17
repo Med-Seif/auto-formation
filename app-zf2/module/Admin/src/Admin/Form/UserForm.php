@@ -14,7 +14,7 @@ Class UserForm {
     private static $form;
     /**
      *
-     * @return Zend\Form\Form
+     * @return \Zend\Form\Form
      */
     public static function getInstance() {
         if (!self::$form) {

@@ -20,19 +20,15 @@
 if (file_exists('vendor/autoload.php')) {
     $loader = include 'vendor/autoload.php';
 }
-
 if (class_exists('Zend\Loader\AutoloaderFactory')) {
     return;
 }
-
 $zf2Path = false;
-
 if (getenv('ZF2_PATH')) {            // Support for ZF2_PATH environment variable
     $zf2Path = getenv('ZF2_PATH');
 } elseif (get_cfg_var('zf2_path')) { // Support for zf2_path directive value
     $zf2Path = get_cfg_var('zf2_path');
 }
-
 if ($zf2Path) {
     if (isset($loader)) {
         $loader->add('Zend', $zf2Path);

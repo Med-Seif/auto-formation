@@ -12,6 +12,16 @@ class Module {
     public $config;
 
     public function getAutoloaderConfig() {
+        /**
+         * Configuring classmap autoloader
+         * To generate a new file "autoload_classmap.php", run >_D:\www\auto-formation\app-zf2\vendor\bin\classmap_generator.php.bat <dir>"
+         * after been moved to the directory to scan
+         */
+        $loader = new \Zend\Loader\ClassMapAutoloader();
+        // Register the class map:
+        $loader->registerAutoloadMap(__DIR__ . '/../autoload_classmap.php');
+        // Register with spl_autoload:
+        $loader->register();
         return array(
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
@@ -44,7 +54,6 @@ class Module {
                 'Admin\Controller\Index' => Controller\IndexController::class,
                 'Admin\Controller\Chart' => Controller\ChartController::class,
                 'Admin\Controller\User'  => Controller\UserController::class,
-            ));
+        ));
     }
-
 }

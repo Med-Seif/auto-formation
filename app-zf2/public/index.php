@@ -4,7 +4,6 @@
  * to the application root now.
  */
 chdir(dirname(__DIR__));
-
 // Decline static file requests back to the PHP built-in webserver
 if (php_sapi_name() === 'cli-server') {
     $path = realpath(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
@@ -16,6 +15,8 @@ if (php_sapi_name() === 'cli-server') {
 
 // Setup autoloading
 require 'init_autoloader.php';
+
+Define ('APPLICATION_PATH', __DIR__ . '/../');
 
 // Run the application!
 Zend\Mvc\Application::init(require 'config/application.config.php')->run();

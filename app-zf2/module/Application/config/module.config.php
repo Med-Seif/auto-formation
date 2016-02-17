@@ -132,11 +132,6 @@ return array(
         ),
         'factories'          => array(
             'translator'          => 'Zend\Mvc\Service\TranslatorServiceFactory',
-            'AppAuthentification' => function($sm) {
-                $auth = new \Zend\Authentication\AuthenticationService();
-                $auth->setStorage(new \Application\Auth\AppStorage());
-                return $auth;
-            },
             'CustomerForm'       => 'Application\Service\Factory\CustomerFormFactory',
         ),
         'services'        => array(),

@@ -33,7 +33,8 @@ class Module {
     }
 
     public function settingUpControllerAccess(MvcEvent $e) {
-        $auth  = $this->serviceManager->get('AppAuthentification');
+        $auth  = $e->getApplication()->getServiceManager()->get('AppAuthentification');
+        //var_dump($auth);die('r');
         $route = $e->getRouteMatch()->getMatchedRouteName();
         if (!$auth->hasIdentity()) {
             if ($route != 'auth') {
@@ -59,5 +60,4 @@ class Module {
             ),
         );
     }
-
 }

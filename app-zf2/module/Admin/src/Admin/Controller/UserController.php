@@ -29,7 +29,7 @@ class UserController extends AbstractActionController {
     public function indexAction() {
         $route = $this->getEvent()->getRouteMatch(); // getEvent() returns MvcEvent
         var_dump($route->getParams());
-        echo $this->generator();
+        echo $this->generator()->generate();
         $users = $this->getServiceLocator()->get('Admin\Model\UserTable')->fetchAll();
         return array('users' => $users);
     }
@@ -53,18 +53,41 @@ class UserController extends AbstractActionController {
         return array('form' => $form);
     }
 
+    public function add2Action() {
+        $form    = UserForm::getInstance();
+        $form->setHydrator($hydrator);
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $userTable = $this->getServiceLocator()->get('Admin\Model\UserTable');
+                $data      = $form->getData();
+                $user      = new \Admin\Model\User();
+                $user->exchangeArray($data);
+                if ($userTable->saveUser($user)) {
+                    $this->flashMessenger()->addSuccessMessage($form->getData()['email'] . " was successfully inserted to database");
+                    return $this->redirect()->toRoute('user');
+                }
+            }
+        }
+        $view = new ViewModel();
+        $view->setTemplate("admin/user/add");
+        $view->setVariable('form',$form);
+        return $view;
+    }
+
     public function editAction() {
         $id        = $this->params()->fromRoute('id');
         $userTable = $this->getServiceLocator()->get('Admin\Model\UserTable');
         $user      = $userTable->getUser($id);
         $form      = UserForm::getInstance();
         $form->bind($user); // you have to implement getArrayCopy in User class, if not you will get this error : Zend\Stdlib\Hydrator\ArraySerializable::extract expects the provided object to implement getArrayCopy()
-        $request = $this->getRequest();
+        $request   = $this->getRequest();
 
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $data       = $form->getData();
+                $data     = $form->getData();
                 $data->id = $data;
                 if ($userTable->saveUser($data)) {
                     $this->flashMessenger()->addSuccessMessage($data->email . " was successfully edited");

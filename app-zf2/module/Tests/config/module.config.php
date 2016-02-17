@@ -11,13 +11,13 @@
 namespace Tests;
 
 return array(
-    'router'       => array(
+    'router'          => array(
         'routes' => array(
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /admin/:controller/:action
-            'tests'  => array(
+            'tests'    => array(
                 'type'          => 'Literal',
                 'options'       => array(
                     'route'    => '/tests',
@@ -42,7 +42,7 @@ return array(
                     )
                 )
             ),
-            'events' => array(
+            'events'   => array(
                 'type'    => 'Segment',
                 'options' => array(
                     'route'       => '/events[.:action]',
@@ -55,7 +55,7 @@ return array(
                     )
                 )
             ),
-            'db'     => array(
+            'db'       => array(
                 'type'    => 'Segment',
                 'options' => array(
                     'route'       => '/db[.:action]',
@@ -80,31 +80,74 @@ return array(
                         'action'     => 'index'
                     )
                 )
+            ),
+            'security' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'       => '/security[.:action]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                    ),
+                    'defaults'    => array(
+                        'controller' => 'Tests\Controller\Security',
+                        'action'     => 'index'
+                    )
+                )
             )
         )
     ),
-    'controllers'  => array(
+    'controllers'     => array(
         'invokables' => array(
-            'Tests\Controller\Index'  => 'Tests\Controller\IndexController',
-            'Tests\Controller\Events' => 'Tests\Controller\EventsController',
-            'Tests\Controller\Db'     => 'Tests\Controller\DbController',
-            'Tests\Controller\View'   => 'Tests\Controller\ViewController',
-            'Tests\Controller\Perf'   => 'Tests\Controller\PerfController'
+            'Tests\Controller\Index'    => 'Tests\Controller\IndexController',
+            'Tests\Controller\Events'   => 'Tests\Controller\EventsController',
+            'Tests\Controller\Db'       => 'Tests\Controller\DbController',
+            'Tests\Controller\View'     => 'Tests\Controller\ViewController',
+            'Tests\Controller\Perf'     => 'Tests\Controller\PerfController',
+            'Tests\Controller\Security' => 'Tests\Controller\SecurityController',
+            'Tests\Controller\Utils'    => 'Tests\Controller\UtilsController',
+            'Tests\Controller\Filter'   => 'Tests\Controller\FilterController',
         ),
         'aliases'    => array(
             'tests-index' => 'Tests\Controller\Index',
-            'view'        => 'Tests\Controller\View'
+            'view'        => 'Tests\Controller\View',
+            'security'    => 'Tests\Controller\Security',
+            'utils'       => 'Tests\Controller\Utils',
+            'filter'      => 'Tests\Controller\Filter',
         )
+    ),
+    'service_manager' => array(
+        'services'          => array('seif' => "A"),
+        'factories'         => array(
+            'AppAuthentification' => function($sm) {
+                $auth = new \Zend\Authentication\AuthenticationService();
+                $auth->setStorage(new \Application\Auth\AppStorage());
+                return $auth;
+            },
+            'MyAppCacheAdapter' => function($sm) {
+                // adapterFactoty accepts a class instance while factory() accepts a string
+                //$cache = \Zend\Cache\StorageFactory::adapterFactory(new \Tests\Cache\MyAppCacheAdapter($sm->get('Zend\Db\Adapter\Adapter')));
+                $cache  = new \Tests\Cache\MyAppCacheAdapter($sm->get('Zend\Db\Adapter\Adapter'));
+                $plugin = \Zend\Cache\StorageFactory::pluginFactory('serializer');
+                //$plugin = new \Zend\Cache\Storage\Plugin\Serializer(); // works too!
+                $cache->addPlugin($plugin);
+                return $cache;
+            }
+        ),
+    //'services' => array('seif' => basename(__FILE__))
     ),
     'view_manager' => array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
-            __DIR__ . '/../view2'
-        )
+            __DIR__ . '/../view2' // added a new location to search in in order to locate template files
+        ),
+        'template_map'        => array(
+            'tests/index/index' => __DIR__ . '/../view/tests/index/index.phtml',
+        ),
     ),
     'view_helpers' => array(
     //'invokables' => array('MyViewHelper' => 'Tests\ViewHelpers\MyViewHelper')
     ),
+    //'filters'      => array('invokables' => array('ReverseString' => 'Tests\Filter\ReverseString')),
     'zfctwig'      => array(
         'extensions'          => array(
             'Twig_Extension_Debug'

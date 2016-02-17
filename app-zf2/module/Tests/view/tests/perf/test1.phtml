@@ -1,0 +1,10 @@
+<?php
+// Testing the cache pattern Capture to cache the uotput
+$capture = Zend\Cache\PatternFactory::factory('capture', array(
+            'public_dir' => __DIR__,
+        ));
+$capture->start();
+?>
+<div>
+    <pre>This output is cached in a file called : <b>perf.test1</b></pre>
+</div>

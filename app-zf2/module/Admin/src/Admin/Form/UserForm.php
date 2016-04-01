@@ -59,7 +59,7 @@ Class UserForm {
                     'name'       => 'username',
                     'required'   => true,
                     'filters'    => array(
-                        array('name' => 'StripTags'),
+                        array('name' => '\Tests\Filter\ReverseString'),
                         array('name' => 'StringTrim')),
                     'validators' => array(
                         array(

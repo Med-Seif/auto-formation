@@ -36,11 +36,8 @@ class Module {
     }
 
     public function onBootstrap(\Zend\Mvc\MvcEvent $e) {
+
         $this->arr[] = __FUNCTION__;
-        $sm          = $e->getApplication()->getServiceManager();
-        /* @var $renderer \Zend\View\Renderer\PhpRenderer */
-        $renderer    = $sm->get('\Zend\View\Renderer\PhpRenderer');
-        //echo "<div class='alert alert-warning' role='alert'><b>" . implode("()</b> => <b>", $this->arr)."()</b>"."</div>";
         /**
          * Configuring session
          */
@@ -53,6 +50,11 @@ class Module {
         $manager->setSaveHandler($saveHandler);
         $manager->getValidatorChain()->attach('session.validate', array(new \Zend\Session\Validator\RemoteAddr(), 'isValid'));
         $manager->getValidatorChain()->attach('session.validate', array(new \Zend\Session\Validator\HttpUserAgent(), 'isValid'));
+        /* @var $fpm \Zend\Filter\FilterPluginManager */
+        $fpm = $e->getApplication()->getServiceManager()->get('filtermanager');
+        //$fpm->setInvokableClass('ReverseString', 'Tests\Filter\ReverseString');
+        //$container   = new \Zend\Session\Container('last_url');
+        //$container->url = "";
     }
 
     function getFilterConfig() {
@@ -60,5 +62,4 @@ class Module {
             'invokables' => array(
                 'ReverseString' => 'Tests\Filter\ReverseString'));
     }
-
 }

@@ -17,6 +17,5 @@ if (php_sapi_name() === 'cli-server') {
 require 'init_autoloader.php';
 
 Define ('APPLICATION_PATH', __DIR__ . '/../');
-
 // Run the application!
 Zend\Mvc\Application::init(require 'config/application.config.php')->run();

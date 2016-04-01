@@ -54,11 +54,16 @@ class AuthController extends AbstractActionController {
                 $auth->setAdapter($adapter);
                 $result   = $auth->authenticate($adapter);
                 if ($result->isValid()) {
-                    return $this->redirect()->toRoute('customer');
+                    $sess  = new \Zend\Session\Container('url');
+                    /* @var $route \Zend\Mvc\Router\Http\RouteMatch */
+                    $route = $sess->url;
+                    if (!$route || $route->getMatchedRouteName() == 'auth' || !$route->getMatchedRouteName()) {
+                        return $this->redirect()->toRoute('customer');
+                    }
+                    return $this->redirect()->toRoute($route->getMatchedRouteName(), $route->getParams());
                 }
             }
         }
-
         return array('form' => $form);
     }
 

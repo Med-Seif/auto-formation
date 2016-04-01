@@ -93,6 +93,19 @@ return array(
                         'action'     => 'index'
                     )
                 )
+            ),
+            'fieldset' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'       => '/form[.:action]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+                    ),
+                    'defaults'    => array(
+                        'controller' => 'Tests\Controller\Form',
+                        'action'     => 'index'
+                    )
+                )
             )
         )
     ),
@@ -106,6 +119,7 @@ return array(
             'Tests\Controller\Security' => 'Tests\Controller\SecurityController',
             'Tests\Controller\Utils'    => 'Tests\Controller\UtilsController',
             'Tests\Controller\Filter'   => 'Tests\Controller\FilterController',
+            'Tests\Controller\Form'     => 'Tests\Controller\FormController',
         ),
         'aliases'    => array(
             'tests-index' => 'Tests\Controller\Index',
@@ -113,6 +127,7 @@ return array(
             'security'    => 'Tests\Controller\Security',
             'utils'       => 'Tests\Controller\Utils',
             'filter'      => 'Tests\Controller\Filter',
+            'form'        => 'Tests\Controller\Form',
         )
     ),
     'service_manager' => array(

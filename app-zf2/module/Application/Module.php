@@ -29,12 +29,12 @@ class Module {
         $this->eventManager       = $e->getApplication()->getEventManager();
         $this->sharedEventManager = $this->eventManager->getSharedManager();
         $this->sharedEventManager->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', array($this, 'settingUpControllerAccess'), 100);
+        $this->eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'saveLastUrl'));
         $this->eventManager->attachAggregate(new EventManager\AuthEventsListener($this->serviceManager));
     }
 
     public function settingUpControllerAccess(MvcEvent $e) {
         $auth  = $e->getApplication()->getServiceManager()->get('AppAuthentification');
-        //var_dump($auth);die('r');
         $route = $e->getRouteMatch()->getMatchedRouteName();
         if (!$auth->hasIdentity()) {
             if ($route != 'auth') {
@@ -44,6 +44,16 @@ class Module {
             if ($route == 'auth') {
                 $e->getTarget()->redirect()->toRoute('home');
             }
+        }
+    }
+    public function saveLastUrl(MvcEvent $e) {
+        $route = $e->getRouteMatch();
+        $sess  = new \Zend\Session\Container('url');
+        if (!$sess->url) {
+            $sess->url = new \Zend\Mvc\Router\Http\RouteMatch(array('name' => 'customer'));
+        }
+        if ($sess->url && $route->getMatchedRouteName() != 'auth') {
+            $sess->url = $e->getRouteMatch();
         }
     }
 
@@ -60,4 +70,5 @@ class Module {
             ),
         );
     }
+
 }

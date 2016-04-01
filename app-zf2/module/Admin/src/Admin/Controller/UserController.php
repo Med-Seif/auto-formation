@@ -27,8 +27,6 @@ class UserController extends AbstractActionController {
     protected $userService;
 
     public function indexAction() {
-        $route = $this->getEvent()->getRouteMatch(); // getEvent() returns MvcEvent
-        var_dump($route->getParams());
         echo $this->generator()->generate();
         $users = $this->getServiceLocator()->get('Admin\Model\UserTable')->fetchAll();
         return array('users' => $users);
@@ -36,61 +34,39 @@ class UserController extends AbstractActionController {
 
     public function addAction() {
         $form    = UserForm::getInstance();
+        $form->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
+        $form->bind(new \Admin\Model\User());
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $userTable = $this->getServiceLocator()->get('Admin\Model\UserTable');
                 $data      = $form->getData();
-                $user      = new \Admin\Model\User();
-                $user->exchangeArray($data);
-                if ($userTable->saveUser($user)) {
-                    $this->flashMessenger()->addSuccessMessage($form->getData()['email'] . " was successfully inserted to database");
-                    return $this->redirect()->toRoute('user');
+                if ($userTable->saveUser($data)) {
+                    $this->flashMessenger()->addSuccessMessage($form->getData(\Zend\Form\FormInterface::VALUES_AS_ARRAY)['email'] . " was successfully inserted to database");
+                    //return $this->redirect()->toRoute('user');
                 }
             }
         }
         return array('form' => $form);
     }
 
-    public function add2Action() {
-        $form    = UserForm::getInstance();
-        $form->setHydrator($hydrator);
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $form->setData($request->getPost());
-            if ($form->isValid()) {
-                $userTable = $this->getServiceLocator()->get('Admin\Model\UserTable');
-                $data      = $form->getData();
-                $user      = new \Admin\Model\User();
-                $user->exchangeArray($data);
-                if ($userTable->saveUser($user)) {
-                    $this->flashMessenger()->addSuccessMessage($form->getData()['email'] . " was successfully inserted to database");
-                    return $this->redirect()->toRoute('user');
-                }
-            }
-        }
-        $view = new ViewModel();
-        $view->setTemplate("admin/user/add");
-        $view->setVariable('form',$form);
-        return $view;
-    }
-
     public function editAction() {
         $id        = $this->params()->fromRoute('id');
+        /* @var $userTable  \Admin\Model\UserTable */
         $userTable = $this->getServiceLocator()->get('Admin\Model\UserTable');
         $user      = $userTable->getUser($id);
         $form      = UserForm::getInstance();
+        $form->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
         $form->bind($user); // you have to implement getArrayCopy in User class, if not you will get this error : Zend\Stdlib\Hydrator\ArraySerializable::extract expects the provided object to implement getArrayCopy()
         $request   = $this->getRequest();
-
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                $data     = $form->getData();
-                $data->id = $data;
-                if ($userTable->saveUser($data)) {
-                    $this->flashMessenger()->addSuccessMessage($data->email . " was successfully edited");
+                $userObject     = $form->getData();
+                if ($userTable->saveUser($userObject)) {
+                    $this->flashMessenger()->addSuccessMessage($userObject->email . " was successfully edited");
+                    echo "SUCCESS";
                     return $this->redirect()->toRoute('user');
                 }
             }

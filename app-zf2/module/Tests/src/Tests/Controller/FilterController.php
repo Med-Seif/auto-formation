@@ -55,5 +55,12 @@ class FilterController extends \Zend\Mvc\Controller\AbstractActionController {
         echo $chain->filter("path_to_country");
         return false;
     }
+    public function aAction(){
+        $f = $this->getServiceLocator()
+                             ->get('FilterManager')
+                             ->get('ReverseString');
+        var_dump($f->filter('123'));
+        return false;
+    }
 
 }
